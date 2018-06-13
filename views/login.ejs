@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=1,initial-scale=1,user-scalable=1" />
+	<title>Login ITSC APPs</title>
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="styles.css" />
+
+</head>
+<body>
+
+	<section class="container" id="forma1" style="display: block">
+			<section class="login-form">
+				<form onsubmit="login(); return false;" role="login">
+					<img src="/logo_itsc.png" style="max-width:100%; max-height:100%;" />
+					<input type="text" id="usuario" placeholder="Usuario" required class="form-control input-lg" />
+					<input type="password" id="password" placeholder="Contraseña" required class="form-control input-lg" />
+					<label id="clave_mal" style="font-weight: bold; color: red; display: none">Usuario/Clave Incorrectos</label>
+					<button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Ingresar</button>
+				</form>
+				<div class="form-links">
+					<a href="http://www.itsc.ec">www.itsc.ec</a>
+				</div>
+			</section>
+	</section>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+	<script>
+
+		var usuario = document.getElementById('usuario')
+		var clave = document.getElementById('password')
+
+		async function login () {
+			try {
+				document.body.style.pointerEvents = "none" //Bloquea todo click hasta que se carge la pagina
+				
+				var res = await fetch('/login', {
+					method: 'POST',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({usuario: usuario.value, clave: clave.value})
+				})
+				
+				var msg = await res.text()
+				if (res.ok) {
+					window.location.replace(`/login/token/${encodeURIComponent(msg)}`) 
+
+				} else {
+					document.getElementById('clave_mal').style.display = 'block'
+					alert(msg)
+					console.log(res, msg)
+				}
+
+			} catch (e) {
+				alert("Ha ocurrido un error!")
+				console.log("Error", e)
+			} finally {
+				document.body.style.pointerEvents = "all"
+			}			
+		}
+		
+	</script>
+</body>
+</html>
