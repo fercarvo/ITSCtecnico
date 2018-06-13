@@ -24,10 +24,11 @@ router.post('/servidor/paquete', upload.single('file_jar_tecnico'), async functi
 
         res.json({subidos})
     } catch (e) {
+        console.log(e);
         res.status(500).json({subidos: subidos, error: e.message})
 
     } finally {
-        fs.unlink(newpath, err => err ? console.log(err) : console.log('finalizado'))
+        fs.unlink(newpath, err => err ? console.log("Err Eliminar archivo: ", err) : console.log('finalizado'))
     }
 })
 
@@ -60,10 +61,7 @@ async function getServerData (servers_arr) {
             isactive = 'Y'
             and tb_servidoresidempiere_id in (${servers_arr.join(',')})`;
 
-    console.log(query)
-
-    var { rows } = await pool.query(query);
-    
+    var { rows } = await pool.query(query);    
     return rows
 }
 
@@ -96,9 +94,7 @@ function sendPackage(file, server, user, password) {
                 } 
             } 
         }
-
-        console.log(options)
-        
+    
         request(options, function (error, response) {
             if (error) 
                 return reject(new Error(error.message + ' servidor: ' + server))

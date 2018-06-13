@@ -15,6 +15,10 @@ angular.module('app', ['ui.router'])
 
         $scope.servidores = []
 
+        $scope.resultado = {}
+        $scope.resultado.error = null
+        $scope.resultado.exito = []
+
         $scope.seleccionar = function (servidor) {
             servidor.check = true;
         }
@@ -26,7 +30,7 @@ angular.module('app', ['ui.router'])
         $scope.procesar = async function () {
             try {
                 if ($scope.servidores.every(s => s.check === false))
-                    return alert("Seleccione al menos un servidor");
+                    throw new Error("Seleccione al menos un servidor");
             
                 var servers = $scope.servidores.filter(s => s.check === true).map(s => s.id);
 
@@ -37,6 +41,8 @@ angular.module('app', ['ui.router'])
                 var data = new FormData()
                 data.append('file_jar_tecnico', document.getElementById('archivo').files[0])
 
+                waitingDialog.show("Cargando Paquetes");
+
                 var result = await fetch(url, {
                     method: 'POST',
                     body: data
@@ -44,16 +50,20 @@ angular.module('app', ['ui.router'])
 
                 var resultado = await result.json()
 
-                if (result.ok) {
-                    alert("Subido con exito")
-                } else {
-                    alert(resultado.error)
-                }
+                console.log("resultado", resultado)
+                
+                $scope.resultado.error = resultado.error
+                $scope.resultado.exito = resultado.subidos
 
-                console.log(resultado)
+                
                 
             } catch (e) {
-                console.log("error", e)
+                console.log(e)
+                $scope.resultado.error = e.message
+            } finally {
+                waitingDialog.hide();
+                $scope.$apply()
+                $('#resultados_modal').modal('show')
             }
         }
 
