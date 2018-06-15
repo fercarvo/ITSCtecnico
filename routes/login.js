@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var { pool, users } = require('../util/DB.js');
+var { users, secret, sign_alg } = require('../util/DB.js');
 var cookies = require('cookie-parser');
 const crypto = require('crypto');
 
@@ -41,12 +41,16 @@ router.post('/login', function (req, res, next) {
 
     try {
         if (checkUsuario(req.body.usuario, req.body.clave)) {
-            var token = createToken({usr: req.body.usuario, puesto: 'Tecnico'})
+            var token = createToken({
+                usr: req.body.usuario, 
+                puesto: 'Tecnico',
+                iat: new Date()
+            })
             res.cookie('session_itsc', token,  { maxAge: 1000*60*60*12, httpOnly: true})
             res.redirect('/')  
-        }
-        
-        res.redirect(`/login/?msg=${encodeURIComponent("Usuario/Clave Incorrectas")}`)
+        } else {
+            res.redirect(`/login/?msg=${encodeURIComponent("Usuario/Clave Incorrectas")}`)
+        }        
         
     } catch (e) {
         next(e)
@@ -71,30 +75,30 @@ router.post('/login', function (req, res, next) {
 
 
 function checkUsuario (user, pass) {
-    var user = users.find(u => u.user === user && u.pass === pass)
+    var user = users.find(u => u.user === user && u.pass === pass);
     
     if (user)
-        return true
+        return true;
     
     return false
 }
 
 //Crea token de sesion
 function createToken (json) {
-    var hmac = crypto.createHmac('SHA256', 'ItSCS3cret0fLif3');
+    var hmac = crypto.createHmac(sign_alg, secret);
     var payload = JSON.stringify(json)
     var payload_base64 = Buffer.from(payload, 'utf8').toString('base64')
 
     hmac.update(payload, 'utf8');
     var sign = hmac.digest('base64');
 
-    return `${payload_base64}.${sign}`;
+    return encodeURIComponent(`${payload_base64}.${sign}`);
 }
 
 //Lee token de sesion, verifica y retorna payload
 function readToken (text) {
-    var hmac = crypto.createHmac('SHA256', 'ItSCS3cret0fLif3');
-    var cookie = text.split('.')
+    var hmac = crypto.createHmac(sign_alg, secret);
+    var cookie = decodeURIComponent(text).split('.')
 
     if (cookie.length !== 2)
         throw new Error('Cookie invalida, no cumple formato');
