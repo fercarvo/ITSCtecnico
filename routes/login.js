@@ -4,12 +4,6 @@ var { users, secret, sign_alg } = require('../util/DB.js');
 var cookies = require('cookie-parser');
 const crypto = require('crypto');
 
-router.use(function (req, res, next) {
-    res.set('Cache-Control', "private, no-cache, no-store, must-revalidate")
-    next()
-})
-
-
 router.get('/login', function(req, res, next) {
     res.render('login');
 });
@@ -26,7 +20,7 @@ router.validarSesion = function (req, res, next) {
         if (req.url === '/')
             return res.redirect('/login/')
         
-        res.status(401)
+        res.status(401).send("unauth")
     }
 }
 
@@ -57,20 +51,6 @@ router.post('/login', function (req, res, next) {
         console.log("Error set cookie", e)
     }    
 })
-
-/*router.get('/login/token/:data', function (req, res, next) {
-    try {
-
-        var token = decodeURIComponent(req.params.data)
-
-        readToken(token)
-        res.cookie('session_itsc', token,  { maxAge: 1000*60*60*12, httpOnly: true})
-        res.redirect(301, '/')  
-    } catch (e) {
-        console.log("error token", e)
-        res.redirect('/login')
-    }
-})*/
 
 
 

@@ -18,7 +18,7 @@
 
 
   <!-- Custom styles for this template-->
-  <link href="css/sb-admin.css" rel="stylesheet">
+  <link href="/css/sb-admin.css" rel="stylesheet">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top" ng-app="app">
@@ -31,10 +31,31 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
 
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" ui-sref-active="active" ui-sref="paquete" title="Tables">
-          <a class="nav-link" href="#">
-            <i class="fa fa-fw fa-table"></i>
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" ui-sref-active="active" ui-sref="paquete" title="Subir Paquete">
+          <a class="nav-link" >
+            <i class="fa fa-fw fa-upload"></i>
             <span class="nav-link-text">Subir Paquete</span>
+          </a>
+        </li>
+
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" ui-sref-active="active" ui-sref="consola" title="Consola ITSC">
+          <a class="nav-link">
+            <i class="fa fa-fw fa-desktop"></i>
+            <span class="nav-link-text">Consola ITSC</span>
+          </a>
+        </li>
+
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" ui-sref-active="active" ui-sref="reinicio_server" title="Reiniciar Servidores">
+          <a class="nav-link">
+            <i class="fa fa-fw fa-server"></i>
+            <span class="nav-link-text">Reiniciar Servidores</span>
+          </a>
+        </li>
+
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" ui-sref-active="active" ui-sref="backup_db" title="Backup DBs">
+          <a class="nav-link">
+            <i class="fa-fw fa fa-database"></i>
+            <span class="nav-link-text">Backup DBs</span>
           </a>
         </li>
         <!--

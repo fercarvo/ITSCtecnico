@@ -4,7 +4,19 @@ angular.module('app', ['ui.router'])
             .state('paquete', {
                 templateUrl: '/views/paquete.html',
                 controller: 'paquete'
-            })      
+            })
+            .state('consola', {
+                templateUrl: '/views/consola.html',
+                controller: 'consola'
+            })
+            .state('reinicio_server', {
+                templateUrl: '/views/reinicio_server.html',
+                controller: 'reinicio_server'
+            })   
+            .state('backup_db', {
+                templateUrl: '/views/backup_db.html',
+                controller: 'backup_db'
+            })         
     }])
     .run(["$state", "$http", "$templateCache", function ($state, $http, $templateCache) {
         loadTemplates($state, "paquete", $http, $templateCache)
@@ -88,6 +100,18 @@ angular.module('app', ['ui.router'])
             }
             
         }
+
+    }])
+    .controller('consola', [function() {
+        console.log("consola web...")
+
+    }])
+    .controller('reinicio_server', [function(){
+        console.log("reinicio servidor...")
+
+    }])
+    .controller('backup_db', [function(){
+        console.log("reinicio servidor...")
 
     }])
     
