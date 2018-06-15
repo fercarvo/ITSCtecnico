@@ -4,6 +4,11 @@ var { pool, users } = require('../util/DB.js');
 var cookies = require('cookie-parser');
 const crypto = require('crypto');
 
+router.use(function (req, res, next) {
+    res.set('Cache-Control', "private, no-cache, no-store, must-revalidate")
+    next()
+})
+
 
 router.get('/login', function(req, res, next) {
     res.render('login');
@@ -21,48 +26,35 @@ router.validarSesion = function (req, res, next) {
         if (req.url === '/')
             return res.redirect('/login/')
         
-        res.redirect(401)
+        res.status(401)
     }
 }
 
 router.get('/logout', function (req, res, next) {
     res.clearCookie('session_itsc');
-    res.redirect('/login')
+    res.redirect('/login/')
 })
 
 router.post('/login', function (req, res, next) {    
     if (!req.body || !req.body.usuario || !req.body.clave)
-        return res.status(400).send('Por favor, envie datos correctos');
+        return res.status(400).redirect(`/login/?msg=${encodeURIComponent("Por favor, envie datos correctos")}`);
 
     try {
-        if (checkUsuario(req.body.usuario, req.body.clave))
-            return res.send(createToken({usr: req.body.usuario, puesto: 'Tecnico'}));
+        if (checkUsuario(req.body.usuario, req.body.clave)) {
+            var token = createToken({usr: req.body.usuario, puesto: 'Tecnico'})
+            res.cookie('session_itsc', token,  { maxAge: 1000*60*60*12, httpOnly: true})
+            res.redirect('/')  
+        }
         
-        res.status(400).send("Usuario/clave incorrectos");
+        res.redirect(`/login/?msg=${encodeURIComponent("Usuario/Clave Incorrectas")}`)
         
     } catch (e) {
         next(e)
+        console.log("Error set cookie", e)
     }    
 })
 
-/*router.post('/login/datos', async function (req, res, next) {
-    if (!req.body || !req.body.usuario || !req.body.clave || !req.body.ad_client_id || !req.body.ad_role_id || !req.body.ad_org_id)
-        return res.status(400).send('Por favor, envie datos correctos');
-
-    try {
-        var data = await createPayload(req.body.usuario, req.body.clave, req.body.ad_client_id, req.body.ad_role_id, req.body.ad_org_id, req.body.m_warehouse_id)
-        var token = createToken(data)
-
-        //res.cookie('session_itsc', token,  { maxAge: 1000*60*60*12, httpOnly: true})
-        res.send(token)
-        
-    } catch (e) {
-        console.log(e)
-        res.status(400).send('Error autenticacion ' + e.message);
-    }    
-})*/
-
-router.get('/login/token/:data', function (req, res, next) {
+/*router.get('/login/token/:data', function (req, res, next) {
     try {
 
         var token = decodeURIComponent(req.params.data)
@@ -74,7 +66,7 @@ router.get('/login/token/:data', function (req, res, next) {
         console.log("error token", e)
         res.redirect('/login')
     }
-})
+})*/
 
 
 
