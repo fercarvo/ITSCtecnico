@@ -56,6 +56,7 @@ angular.module('app', ['ui.router'])
                 waitingDialog.show("Cargando Paquetes");
 
                 var result = await fetch(url, {
+                    credentials: "same-origin",
                     method: 'POST',
                     body: data
                 })

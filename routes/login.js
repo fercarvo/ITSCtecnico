@@ -17,6 +17,7 @@ router.validarSesion = function (req, res, next) {
         next()
 
     } catch (e) {
+        console.log(e)
         if (req.url === '/')
             return res.redirect('/login/')
         
@@ -37,8 +38,7 @@ router.post('/login', function (req, res, next) {
         if (checkUsuario(req.body.usuario, req.body.clave)) {
             var token = createToken({
                 usr: req.body.usuario, 
-                puesto: 'Tecnico',
-                iat: new Date()
+                puesto: 'Tecnico'
             })
             res.cookie('session_itsc', token,  { maxAge: 1000*60*60*12, httpOnly: true})
             res.redirect('/')  
