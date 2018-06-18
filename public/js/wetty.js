@@ -1,30 +1,6 @@
 var term;
-var socket = io(location.origin, {path: '/terminal'})
+var socket = io(location.origin, {path: '/terminal-connection'})
 var buf = '';
-
-/*class Wetty {
-    constructor (argv) {
-        this.argv_ = argv;
-        this.io = null;
-        this.pid_ = -1;
-    }
-
-    run () {
-        this.io = this.argv_.io.push();
-
-        this.io.onVTKeystroke = this.sendString_.bind(this);
-        this.io.sendString = this.sendString_.bind(this);
-        this.io.onTerminalResize = this.onTerminalResize.bind(this);
-    }
-
-    sendString (str) {
-        socket.emit('input', str)
-    }
-
-    onTerminalResize (col, row) {
-        socket.emit('resize', { col, row })
-    }
-}*/
 
 function Wetty(argv) {
     this.argv_ = argv;
@@ -90,4 +66,8 @@ socket.on('output', function(data) {
 
 socket.on('disconnect', function() {
     console.log("Socket.io connection closed");
+});
+
+socket.on('error', function(err) {
+    console.log(err);
 });

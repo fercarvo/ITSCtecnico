@@ -103,8 +103,12 @@ angular.module('app', ['ui.router'])
         }
 
     }])
-    .controller('consola', [function() {
-        console.log("consola web...")
+    .controller('consola', ["$scope", function($scope) {
+
+        $scope.recargar = function () {
+            document.getElementById('terminal_iframe').src = document.getElementById('terminal_iframe').src
+        }
+
 
     }])
     .controller('reinicio_server', [function(){

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var login = require('./login')
+var login = require('./login').router
 var { pool } = require('../util/DB.js');
 var multer  = require('multer')
 var upload = multer({ dest: 'uploads/' })

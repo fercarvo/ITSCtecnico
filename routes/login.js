@@ -1,12 +1,16 @@
 var express = require('express');
 var router = express.Router();
 var { users, secret, sign_alg } = require('../util/DB.js');
-var cookies = require('cookie-parser');
 const crypto = require('crypto');
+
+router.use(function (req, res, next) {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+    next();
+})
 
 router.get('/login', function(req, res, next) {
     res.render('login');
-});
+})
 
 router.validarSesion = function (req, res, next) {    
     try {
@@ -95,4 +99,7 @@ function readToken (text) {
     return JSON.parse(payload)
 }
 
-module.exports = router;  
+module.exports = {
+    router,
+    readToken   
+}
