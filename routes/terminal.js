@@ -19,7 +19,7 @@ function socketAuth(socket, next) {
         next()
 
     } catch (e) {
-        console.log(e)
+        console.log(e.message)
         next(new Error("401 Unauthorized"))
     }
 }

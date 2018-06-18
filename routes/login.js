@@ -42,7 +42,8 @@ router.post('/login', function (req, res, next) {
         if (checkUsuario(req.body.usuario, req.body.clave)) {
             var token = createToken({
                 usr: req.body.usuario, 
-                puesto: 'Tecnico'
+                puesto: 'Tecnico',
+                iat: new Date()
             })
             res.cookie('session_itsc', token,  { maxAge: 1000*60*60*12, httpOnly: true})
             res.redirect('/')  
