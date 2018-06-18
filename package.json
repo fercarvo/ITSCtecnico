@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "echo '1991' | sudo -S NODE_ENV=production node app.js",
-    "test": "echo '1991' | sudo -S node app.js"
+    "start": "echo '' | sudo -S NODE_ENV=production node app.js",
+    "test": "echo '' | sudo -S node app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
