@@ -49,8 +49,12 @@ function connectionCB (socket) {
         term.write(data);
     });
     socket.on('disconnect', function() {
-        term.end();
-        console.log('Ended')
+        try {
+            term.end();
+            process.kill(term.pid, 'SIGKILL');            
+        } catch (e) {
+            console.log('Killing process', e)
+        }
     });
 }
 
