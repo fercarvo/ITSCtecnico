@@ -49,6 +49,36 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+async function ssh_test() {
+  try {
+      var node_ssh = require('node-ssh') 
+      var ssh = new node_ssh()
+      await ssh.connect({
+          host: '',
+          port: 0,
+          username: '',
+          password: ''
+      })
+
+      var comando = `echo 123
+      echo 234
+      cat nginx.conf`
+
+      await ssh.exec(comando, [], {
+          onStdout(chunk) {
+              console.log('stdoutChunk', chunk)
+          },
+          onStderr(chunk) {
+              console.log('stderrChunk', chunk)
+          },
+      })          
+  } catch (e) {
+      console.log(e)
+  }
+}
+
+//ssh_test()
+
 
 
 
