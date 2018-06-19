@@ -106,7 +106,7 @@ angular.module('app', ['ui.router'])
     .controller('consola', ["$scope", function($scope) {
 
         $scope.recargar = function () {
-            document.getElementById('terminal_iframe').src = document.getElementById('terminal_iframe').src
+            document.getElementById('terminal_iframe').src = "/terminal/"
         }
 
 
