@@ -30,7 +30,7 @@
     <div id="terminal"></div>
     <script>
         var term;
-        var socket = io(location.origin, {path: '/terminal-connection'})
+        var socket = io(location.origin, {path: '/terminal-connection', transports: ['websocket']})
         var buf = '';
 
         function Wetty(argv) {

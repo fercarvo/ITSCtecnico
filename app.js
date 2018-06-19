@@ -8,6 +8,7 @@ var terminal = require('./routes/terminal')
 var server = app.listen(3000)
 
 var io = require('socket.io')(server, {path: '/terminal-connection'});
+io.set('transports', ['websocket']);
 io.use(terminal.socketAuth)
 io.on('connection', terminal.connectionCB)
 

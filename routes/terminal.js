@@ -41,21 +41,24 @@ function connectionCB (socket) {
     term.on('exit', function(code) {
         console.log((new Date()) + " PID=" + term.pid + " ENDED")
         socket.disconnect(true)
-    });
+    })
+    
     socket.on('resize', function(data) {
         term.resize(data.col, data.row);
-    });
+    })
+
     socket.on('input', function(data) {
         term.write(data);
-    });
+    })
+
     socket.on('disconnect', function() {
         try {
             term.end();
-            process.kill(term.pid, 'SIGKILL');            
+            process.kill(term.pid, 'SIGKILL');  
         } catch (e) {
-            console.log('Killing process', e)
+            ;
         }
-    });
+    })
 }
 
 //obtiene una cookie de los headers
