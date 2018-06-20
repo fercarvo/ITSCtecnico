@@ -26,7 +26,7 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
                 sv.username,
                 sv.password 
             )
-            
+            console.log(body)
             subidos.push({server: sv.name, body})
         }
 

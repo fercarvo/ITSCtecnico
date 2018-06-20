@@ -43,6 +43,10 @@ angular.module('app', ['ui.router'])
         }
 
         $scope.procesar = async function () {
+            $scope.resultado = {}
+            $scope.resultado.error = null
+            $scope.resultado.exito = []
+
             try {
                 if ($scope.servidores.every(s => s.check === false))
                     throw new Error("Seleccione al menos un servidor");
@@ -65,6 +69,7 @@ angular.module('app', ['ui.router'])
                 })
 
                 var resultado = await result.json()
+                console.log(resultado)
                 resultado.subidos.forEach(server => {
                     var dom = new DOMParser().parseFromString(server.body, "application/xml");
                     server.IsError = dom.activeElement.firstChild.firstChild.firstChild.attributes.IsError.textContent
