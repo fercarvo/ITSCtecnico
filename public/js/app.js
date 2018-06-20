@@ -65,11 +65,11 @@ angular.module('app', ['ui.router'])
                 })
 
                 var resultado = await result.json()
-                resultado.forEach(server => {
+                resultado.subidos.forEach(server => {
                     var dom = new DOMParser().parseFromString(server.body, "application/xml");
                     server.IsError = dom.activeElement.firstChild.firstChild.firstChild.attributes.IsError
-                    server.Error = a.activeElement.firstChild.firstChild.firstChild.childNodes[0].textContent
-                    server.Summary = a.activeElement.firstChild.firstChild.firstChild.childNodes[1].textContent
+                    server.Error = dom.activeElement.firstChild.firstChild.firstChild.childNodes[0].textContent
+                    server.Summary = dom.activeElement.firstChild.firstChild.firstChild.childNodes[1].textContent
                 })
 
                 console.log("resultado", resultado)
