@@ -26,7 +26,7 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
                 sv.username,
                 sv.password 
             )
-            console.log(body)
+            
             subidos.push({server: sv.name, body})
         }
 
@@ -113,7 +113,6 @@ function callWebService(url_file, file_name, esSistema, server, user, password) 
 
             if (response && (response.statusCode === 200 || response.statusCode === 302) )
                 return resolve(body);
-                //return resolve({code: response.statusCode, message: response.statusMessage})    
             
             reject(new Error(response.statusCode + ' ' + response.statusMessage + ' ' + server))    
         })    

@@ -39,7 +39,7 @@
   
   </div>
 
-  <div class="modal fade" id="resultados_modal">
+  <div class="modal fade" id="resultados_zip_modal">
       <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-body">
@@ -47,12 +47,18 @@
                 <table class="table table-striped" ng-show="resultado.exito.length > 0 ? true : false">
                   <thead id="tblHead">
                     <tr>
-                      <th>Servidores Exitosos</th>
+                      <th>Servidor</th>
+                      <th>IsError</th>
+                      <th>Error</th>
+                      <th>Summary</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr ng-repeat="server in resultado.exito">
-                      <td>{{server}}</td>
+                      <td>{{server.server}}</td>
+                      <td>{{server.IsError}}</td>
+                      <td>{{server.Error}}</td>
+                      <td>{{server.Summary}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -61,7 +67,7 @@
                 <table class="table table-striped" ng-show="resultado.error ? true : false">
                     <thead id="tblHead">
                       <tr>
-                        <th>Error</th>
+                        <th>Errores de conexión</th>
                       </tr>
                     </thead>
                     <tbody>

@@ -67,16 +67,14 @@ angular.module('app', ['ui.router'])
                 var resultado = await result.json()
                 resultado.subidos.forEach(server => {
                     var dom = new DOMParser().parseFromString(server.body, "application/xml");
-                    server.IsError = dom.activeElement.firstChild.firstChild.firstChild.attributes.IsError
+                    server.IsError = dom.activeElement.firstChild.firstChild.firstChild.attributes.IsError.textContent
                     server.Error = dom.activeElement.firstChild.firstChild.firstChild.childNodes[0].textContent
                     server.Summary = dom.activeElement.firstChild.firstChild.firstChild.childNodes[1].textContent
                 })
 
                 console.log("resultado", resultado)
-                //$scope.resultado.error = resultado.error
-                //$scope.resultado.exito = resultado.subidos
-
-                
+                $scope.resultado.error = resultado.error
+                $scope.resultado.exito = resultado.subidos                
                 
             } catch (e) {
                 console.log(e)
@@ -84,7 +82,7 @@ angular.module('app', ['ui.router'])
             } finally {
                 waitingDialog.hide();
                 $scope.$apply()
-                $('#resultados_modal').modal('show')
+                $('#resultados_zip_modal').modal('show')
             }
         }
 
