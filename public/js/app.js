@@ -74,6 +74,8 @@ angular.module('app', ['ui.router'])
                     var dom = new DOMParser().parseFromString(server.body, "application/xml");
                     server.IsError = dom.activeElement.firstChild.firstChild.firstChild.attributes.IsError.textContent
                     server.Error = dom.activeElement.firstChild.firstChild.firstChild.childNodes[0].textContent
+                    if (server.IsError === "true")
+                        return;
                     server.Summary = dom.activeElement.firstChild.firstChild.firstChild.childNodes[1].textContent
                 })
 
