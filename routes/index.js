@@ -7,9 +7,8 @@ var upload = multer({ dest: 'uploads/' })
 var request = require('request')
 var fs = require('fs')
 
-router.use(login.validarSesion, (req, res, next) => next());
 
-router.post('/packin', upload.single('file_jar_tecnico'), async function (req, res, next) {
+router.post('/packin', login.validarSesion, upload.single('file_jar_tecnico'), async function (req, res, next) {
     var newpath = ""
     var subidos = []
     try {
@@ -34,7 +33,7 @@ router.post('/packin', upload.single('file_jar_tecnico'), async function (req, r
     }
 })
 
-router.get('/servidor', async function (req, res, next) {
+router.get('/servidor', login.validarSesion,async function (req, res, next) {
     try {
         var query = `
             select
