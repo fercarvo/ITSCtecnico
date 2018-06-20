@@ -1,0 +1,80 @@
+<div>
+    <h3 style="text-align: center;">
+      ITSC Cargar Packin ZIP
+    </h3>
+  
+    <form ng-submit="procesar()" class="container">
+  
+      <div class="form-row">
+        <div class="form-group">
+          <label>Seleccione archivo ZIP</label>
+          <input class="form-control-file" id="archivo_zip" required type="file">
+        </div>
+
+      </div>
+  
+      <div class="form-row">
+        <div class="form-group col-md-8">
+          <button type="submit" class="btn btn-primary">Aceptar</button>
+          <button type="button" ng-click="cancelar()" class="btn btn">Cancelar</button>
+        </div>
+      </div>
+    </form>
+  
+    <p></p>
+    <p></p>
+    <div style="text-align: left;">
+     
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Seleccionar Servidores</h3>
+        </div>
+        <div class="panel-body" style="text-align: center;">
+          <button ng-repeat="server in servidores | orderBy : ['name']" ng-disabled="server.check" ng-click="seleccionar(server)" style="text-align: left; margin: 5px;width: 250px;" ng-class="server.check ? 'btn btn-primary' : 'btn'"> 
+            <div style="font-weight: bold;">{{$index + 1}}: {{server.name}}</div>
+          </button>
+  
+        </div>      
+      </div>
+  
+  </div>
+
+  <div class="modal fade" id="resultados_modal">
+      <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-body">
+            <h5 class="text-center">Resultados Ejecución</h5>
+                <table class="table table-striped" ng-show="resultado.exito.length > 0 ? true : false">
+                  <thead id="tblHead">
+                    <tr>
+                      <th>Servidores Exitosos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="server in resultado.exito">
+                      <td>{{server}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                
+
+                <table class="table table-striped" ng-show="resultado.error ? true : false">
+                    <thead id="tblHead">
+                      <tr>
+                        <th>Error</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{resultado.error}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+          </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+              </div>
+              
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->

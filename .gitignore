@@ -2,3 +2,5 @@ node_modules/
 util/
 package-lock.json
 util/postgresql.js
+uploads/
+packin/

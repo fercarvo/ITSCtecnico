@@ -1,9 +1,13 @@
 angular.module('app', ['ui.router'])
     .config(["$stateProvider", "$compileProvider", function ($stateProvider, $compileProvider) {
         $stateProvider
-            .state('paquete', {
+            .state('paquete', { //packin_zip
                 templateUrl: '/views/paquete.html',
                 controller: 'paquete'
+            })
+            .state('packin_zip', { //packin_zip
+                templateUrl: '/views/packin_zip.html',
+                controller: 'packin_zip'
             })
             .state('consola', {
                 templateUrl: '/views/consola.html',
@@ -19,9 +23,86 @@ angular.module('app', ['ui.router'])
             })         
     }])
     .run(["$state", "$http", "$templateCache", function ($state, $http, $templateCache) {
-        loadTemplates($state, "paquete", $http, $templateCache)
+        loadTemplates($state, "packin_zip", $http, $templateCache)
 
 
+    }])
+    .controller("packin_zip" ,["$state", "$scope", function($state, $scope){
+        $scope.servidores = []
+
+        $scope.resultado = {}
+        $scope.resultado.error = null
+        $scope.resultado.exito = []
+
+        $scope.seleccionar = function (servidor) {
+            servidor.check = true;
+        }
+
+        $scope.cancelar = function () {
+            $scope.servidores.forEach(servidor => servidor.check = false);
+        }
+
+        $scope.procesar = async function () {
+            try {
+                if ($scope.servidores.every(s => s.check === false))
+                    throw new Error("Seleccione al menos un servidor");
+            
+                var servers = $scope.servidores.filter(s => s.check === true).map(s => s.id);
+
+                var url = new URL(`${document.URL}packin/`)
+                url.search = new URLSearchParams({
+                    servers: servers
+                })
+                var data = new FormData()
+                data.append('file_zip_tecnico', document.getElementById('archivo_zip').files[0])
+
+                waitingDialog.show("Cargando Paquetes");
+
+                var result = await fetch(url, {
+                    credentials: "same-origin",
+                    method: 'POST',
+                    body: data
+                })
+
+                var resultado = await result.json()
+
+                console.log("resultado", resultado)
+                //$scope.resultado.error = resultado.error
+                //$scope.resultado.exito = resultado.subidos
+
+                
+                
+            } catch (e) {
+                console.log(e)
+                $scope.resultado.error = e.message
+            } finally {
+                waitingDialog.hide();
+                $scope.$apply()
+                $('#resultados_modal').modal('show')
+            }
+        }
+
+        servidores();
+
+        async function servidores() {
+            try {
+                var data = await fetch('/servidor', {credentials: "same-origin"})
+                var text = await data.text()
+
+                if (data.ok) {
+                    $scope.servidores = JSON.parse(text);
+                    $scope.servidores.forEach(s => s.check = false)
+                    $scope.$apply();
+                }
+                else
+                    throw new Error(`Status: ${data.status}, ${data.statusText}`);
+
+            } catch (e) {
+                alert("error carga")
+                console.log(e)
+            }
+            
+        }
     }])
     .controller("paquete" ,["$state", "$scope", function($state, $scope){
 
