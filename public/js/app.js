@@ -65,6 +65,12 @@ angular.module('app', ['ui.router'])
                 })
 
                 var resultado = await result.json()
+                resultado.forEach(server => {
+                    var dom = new DOMParser().parseFromString(server.body, "application/xml");
+                    server.IsError = dom.activeElement.firstChild.firstChild.firstChild.attributes.IsError
+                    server.Error = a.activeElement.firstChild.firstChild.firstChild.childNodes[0].textContent
+                    server.Summary = a.activeElement.firstChild.firstChild.firstChild.childNodes[1].textContent
+                })
 
                 console.log("resultado", resultado)
                 //$scope.resultado.error = resultado.error
