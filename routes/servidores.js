@@ -33,6 +33,7 @@ router.post('/servidor/paquete', login.validarSesion, upload.single('file_jar_te
 })
 
 router.get('/servidor', login.validarSesion, async function (req, res, next) {
+    res.set('Cache-Control', 'private, max-age=30')
     try {
         var query = `
             select

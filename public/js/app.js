@@ -23,7 +23,7 @@ angular.module('app', ['ui.router'])
             })         
     }])
     .run(["$state", "$http", "$templateCache", function ($state, $http, $templateCache) {
-        loadTemplates($state, "packin_zip", $http, $templateCache)
+        loadTemplates($state, "paquete", $http, $templateCache)
 
 
     }])
@@ -35,7 +35,10 @@ angular.module('app', ['ui.router'])
         $scope.resultado.exito = []
 
         $scope.seleccionar = function (servidor) {
-            servidor.check = true;
+            if (servidor.check)
+                servidor.check = false;
+            else
+                servidor.check = true;
         }
 
         $scope.cancelar = function () {
@@ -129,7 +132,10 @@ angular.module('app', ['ui.router'])
         $scope.resultado.exito = []
 
         $scope.seleccionar = function (servidor) {
-            servidor.check = true;
+            if (servidor.check)
+                servidor.check = false;
+            else
+                servidor.check = true;
         }
 
         $scope.cancelar = function () {
