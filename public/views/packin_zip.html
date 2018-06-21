@@ -15,8 +15,8 @@
   
       <div class="form-row">
         <div class="form-group col-md-8">
-          <button type="submit" class="btn btn-info">Importar</button>
-          <button type="button" ng-click="cancelar()" class="btn btn">Cancelar</button>
+          <button type="submit" class="btn btn-warning">Importar</button>
+          <button type="button" ng-click="cancelar()" class="btn btn-light">Cancelar</button>
         </div>
       </div>
     </form>
@@ -30,7 +30,7 @@
           <h3 class="panel-title">Seleccionar Servidores</h3>
         </div>
         <div class="panel-body" style="text-align: center;">
-          <button ng-repeat="server in servidores | orderBy : ['name']" ng-disabled="server.check" ng-click="seleccionar(server)" style="text-align: left; margin: 5px;width: 250px;" ng-class="server.check ? 'btn btn-info' : 'btn'"> 
+          <button ng-repeat="server in servidores | orderBy : ['name']" ng-disabled="server.check" ng-click="seleccionar(server)" style="text-align: left; margin: 5px;width: 250px;" ng-class="server.check ? 'btn btn-warning' : 'btn'"> 
             <div style="font-weight: bold;">{{$index + 1}}: {{server.name}}</div>
           </button>
   
