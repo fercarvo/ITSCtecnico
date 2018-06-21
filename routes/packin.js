@@ -20,26 +20,18 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
         var data_sv_arr = await getServerData([...req.query.servers.split(',')]);
 
         for (var server of data_sv_arr) {
-            var promise = callWebService(
+            promises.push( callWebService(
                 `https://tecnico.itsc.ec/packin_files/${req.file.filename}.zip`,
                 req.file.originalname,
                 'Y',
                 server 
-            )
-
-            promises.push(promise)
+            ))
         }
 
-        var results = await Promise.all(promises.map(p => {
-            p.then(data => {
-                return {data, status: "resolved"}
-            }).catch(data => {
-                return {data, status: "rejected"}
-            })
-        }))
+        var results = await Promise.all(promises)
         console.log(results)
-        subidos = results.filter(r => r.status === "resolved").map(r => r.data)
-        errores = results.filter(r => r.status === "rejected").map(r => r.data)
+        subidos = results.filter(r => r.resolved).map(r => r.data)
+        errores = results.filter(r => !r.resolved).map(r => r.data)
 
         console.log("subidos", subidos)
         console.log("errores", errores)
@@ -47,7 +39,10 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
         res.json({subidos, error: errores})
     } catch (e) {
         console.log(e);
-        res.status(500).json({subidos, error: [e.message]})
+        res.status(500).json({
+            subidos, 
+            error: errores.push(e.message)
+        })
 
     } finally {
         fs.unlink(newpath, err => err ? console.log("Err Eliminar archivo: ", err) : console.log('finalizado'))
@@ -110,7 +105,7 @@ function callWebService(url_file, file_name, esSistema, server) {
    </soapenv:Body>
 </soapenv:Envelope>`
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         var options = { 
             method: 'POST',
             url: `http://${server.url}/ADInterface/services/ModelADService`,
@@ -122,13 +117,22 @@ function callWebService(url_file, file_name, esSistema, server) {
         }
     
         request(options, function (error, response, body) {
-            if (error) 
-                return reject(error.message + ' servidor: ' + server.name)
-
-            if (response && (response.statusCode === 200 || response.statusCode === 302) )
-                return resolve({server: server.name, body});
-            
-            reject(response.statusCode + ' ' + response.statusMessage + ' ' + server.name)    
+            if (error) {
+                return resolve({
+                    data: error.message + ' servidor: ' + server.name, 
+                    resolved: false
+                })
+            } else if (response && (response.statusCode === 200 || response.statusCode === 302) ) {
+                return resolve({
+                    data: {server: server.name, body},
+                    resolved: true
+                })
+            } else {
+                resolve({
+                    data:  response.statusCode + ' ' + response.statusMessage + ' ' + server.name, 
+                    resolved: false
+                })                   
+            }                
         })    
     })    
 }
