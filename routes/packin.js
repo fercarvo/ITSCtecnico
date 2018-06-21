@@ -128,31 +128,3 @@ async function rename (oldpath, newpath) {
 
 
 module.exports = router;
-
-
-
-
-
-
-
-
-var a = `
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-    <soap:Body><ns1:runProcessResponse xmlns:ns1="http://idempiereorg/ADInterface/1_0">
-        <RunProcessResponse xmlns="http://idempiere.org/ADInterface/1_0" IsError="false">
-            <Error>Processed=22 Un-Resolved=0</Error>
-            <Summary>Processed=22 Un-Resolved=0</Summary>
-            <LogInfo></LogInfo>
-        </RunProcessResponse>
-    </ns1:runProcessResponse></soap:Body>
-</soap:Envelope>
-`
-var b = `
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-    <soap:Body><ns1:runProcessResponse xmlns:ns1="http://idempiere.org/ADInterface/1_0">
-        <RunProcessResponse xmlns="http://idempiere.org/ADInterface/1_0" IsError="true">
-            <Error>Service type CrearPackInWeb not configured</Error>
-        </RunProcessResponse>
-    </ns1:runProcessResponse></soap:Body>
-</soap:Envelope>
-`
