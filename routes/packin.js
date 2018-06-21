@@ -29,12 +29,9 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
         }
 
         var results = await Promise.all(promises)
-        console.log(results)
+
         subidos = results.filter(r => r.resolved).map(r => r.data)
         errores = results.filter(r => !r.resolved).map(r => r.data)
-
-        console.log("subidos", subidos)
-        console.log("errores", errores)
 
         res.json({subidos, error: errores})
     } catch (e) {
@@ -45,7 +42,7 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
         })
 
     } finally {
-        fs.unlink(newpath, err => err ? console.log("Err Eliminar archivo: ", err) : console.log('finalizado'))
+        fs.unlink(newpath, err => err ? console.log("Err Eliminar archivo: ", err) : console.log('finalizado Pack-in'))
     }
 })
 
