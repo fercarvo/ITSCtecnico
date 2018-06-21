@@ -58,7 +58,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="server in resultado.exito">
+                  <tr ng-repeat="server in resultado.exito | orderBy : ['-IsError', 'server']">
                     <td>{{server.server}}</td>
                     <td>{{server.IsError}}</td>
                     <td>{{server.Error}}</td>
