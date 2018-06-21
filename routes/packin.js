@@ -27,16 +27,16 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
                 server 
             )
 
-            promise.then(data => {
+            promises.push(promise)
+        }
+
+        var results = await Promise.all(promises.map(p => {
+            p.then(data => {
                 return {data, status: "resolved"}
             }).catch(data => {
                 return {data, status: "rejected"}
             })
-
-            promises.push(promise)
-        }
-
-        var results = await Promise.all(promises)
+        }))
         console.log(results)
         subidos = results.filter(r => r.status === "resolved").map(r => r.data)
         errores = results.filter(r => r.status === "rejected").map(r => r.data)
