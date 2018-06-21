@@ -67,15 +67,15 @@
                 </tbody>
               </table>                
 
-              <table class="table table-striped" ng-show="resultado.error ? true : false">
+              <table class="table table-striped" ng-show="resultado.error.length > 0 ? true : false">
                 <thead id="tblHead">
                   <tr>
                     <th>Errores de conexión</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>{{resultado.error}}</td>
+                  <tr ng-repeat="msg in resultado.error">
+                    <td>{{msg}}</td>
                   </tr>
                 </tbody>
               </table>

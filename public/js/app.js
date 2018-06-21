@@ -31,7 +31,7 @@ angular.module('app', ['ui.router'])
         $scope.servidores = []
 
         $scope.resultado = {}
-        $scope.resultado.error = null
+        $scope.resultado.error = []
         $scope.resultado.exito = []
 
         $scope.seleccionar = function (servidor) {
@@ -47,7 +47,7 @@ angular.module('app', ['ui.router'])
 
         $scope.procesar = async function () {
             $scope.resultado = {}
-            $scope.resultado.error = null
+            $scope.resultado.error = []
             $scope.resultado.exito = []
 
             try {
