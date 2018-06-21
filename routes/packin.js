@@ -12,14 +12,14 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
     var subidos = []
     try {
         var oldpath = `${__dirname}/../packin/${req.file.filename}`;
-        var newpath = `${__dirname}/../public/packin_files/${req.file.filename}.jar`;
+        var newpath = `${__dirname}/../public/packin_files/${req.file.filename}.zip`;
         await rename(oldpath, newpath)
 
         var data_sv_arr = await getServerData([...req.query.servers.split(',')]);
 
         for (var sv of data_sv_arr) {
             var body = await callWebService(
-                `https://tecnico.itsc.ec/packin_files/${req.file.filename}.jar`,
+                `https://tecnico.itsc.ec/packin_files/${req.file.filename}.zip`,
                 req.file.originalname,
                 'Y',
                 sv.url,
