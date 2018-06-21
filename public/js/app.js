@@ -69,18 +69,22 @@ angular.module('app', ['ui.router'])
                 })
 
                 var resultado = await result.json()
+
                 console.log(resultado)
+
                 resultado.subidos.forEach(server => {
                     var dom = new DOMParser().parseFromString(server.body, "application/xml");
-                    server.IsError = dom.activeElement.firstChild.firstChild.firstChild.attributes.IsError.textContent
+                    server.IsError = dom.getElementsByTagName('RunProcessResponse')[0].getAttribute('IsError')
                     
-                    if (server.IsError === "true")
-                        server.Error = dom.activeElement.firstChild.firstChild.firstChild.childNodes[0].textContent;
-                    else if (server.IsError === "false")
-                        server.Summary = dom.activeElement.firstChild.firstChild.firstChild.childNodes[1].textContent;
+                    if (server.IsError === "true") {
+                        var ErrorMsg = dom.getElementsByTagName('Error')[0];
+                        server.Error = ErrorMsg ? ErrorMsg.textContent : "" 
+                    } else if (server.IsError === "false") {
+                        var SummaryMsg = dom.getElementsByTagName('Summary')[0];
+                        server.Summary = SummaryMsg ? SummaryMsg.textContent : ""
+                    }
                 })
 
-                console.log("resultado", resultado)
                 $scope.resultado.error = resultado.error
                 $scope.resultado.exito = resultado.subidos                
                 
