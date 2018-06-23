@@ -105,7 +105,7 @@ function callWebService(url_file, file_name, esSistema, server) {
     return new Promise(resolve => {
         var options = { 
             method: 'POST',
-            url: `http://${server.url}/ADInterface/services/ModelADService`,
+            url: `${server.url}/ADInterface/services/ModelADService`,
             headers: { 
                 'Cache-Control': 'no-cache',
                 'Content-Type': 'text/xml; charset=utf-8' 

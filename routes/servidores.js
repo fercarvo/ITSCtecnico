@@ -73,7 +73,7 @@ function sendPackage(file, server, user, password) {
     return new Promise((resolve, reject) => {
         var options = { 
             method: 'POST',
-            url: `http://${server}/osgi/system/console/bundles`,
+            url: `${server}/osgi/system/console/bundles`,
             headers: { 
                 'Postman-Token': '6fd9e0f2-f3ac-44f6-acd3-54c7744c5917',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0',
