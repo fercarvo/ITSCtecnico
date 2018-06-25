@@ -6,6 +6,8 @@ var multer  = require('multer')
 var upload = multer({ dest: 'packin/' })
 var request = require('request')
 var fs = require('fs')
+var host = "https://tecnico.itsc.ec"
+var host_ip = "http://149.56.109.174:3000";
 
 router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), async function (req, res, next) {
     var newpath = ""
@@ -21,7 +23,7 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
 
         for (var server of data_sv_arr) {
             promises.push( callWebService(
-                `https://tecnico.itsc.ec/packin_files/${req.file.filename}.zip`,
+                `/packin_files/${req.file.filename}.zip`,
                 req.file.originalname,
                 'Y',
                 server 
@@ -49,6 +51,7 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
 async function getServerData (servers_arr) { 
     var query = `
         select
+            TB_ServidoresIdempiere_ID as id,
             username, 
             password,
             name, 
@@ -82,7 +85,7 @@ function callWebService(url_file, file_name, esSistema, server) {
                   </_0:field>
 
                   <_0:field column="url">
-                     <_0:val>${url_file}</_0:val>
+                     <_0:val>${server.id == 1000013 || server.id == 1000024 ? host_ip + url_file : host + url_file}</_0:val>
                   </_0:field>
 
                </_0:ParamValues>
