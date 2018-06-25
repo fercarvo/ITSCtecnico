@@ -27,7 +27,7 @@
      
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Seleccionar Servidores</h3>
+          <h3 class="panel-title">Seleccionar Servidores <button ng-click="seleccionar_todos()" class="btn btn-light">Todos</button></h3>
         </div>
         <div class="panel-body" style="text-align: center;">
           <button ng-repeat="server in servidores | orderBy : ['name']" ng-click="seleccionar(server)" style="text-align: left; margin: 5px;width: 250px;" ng-class="server.check ? 'btn btn-dark' : 'btn'"> 

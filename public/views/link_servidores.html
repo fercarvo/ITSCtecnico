@@ -12,7 +12,7 @@
         </div>
         <div class="panel-body" style="text-align: center;">
             <a ng-repeat="server in servidores | orderBy : ['name']" href="{{server.url}}" target="_blank">
-                <button  style="text-align: left; margin: 5px;width: 250px;" class="btn"> 
+                <button  style="text-align: left; margin: 5px;width: 250px;" class="btn btn-light"> 
                     <div style="font-weight: bold;">{{$index + 1}}: {{server.name}}</div>
                 </button>
             </a> 

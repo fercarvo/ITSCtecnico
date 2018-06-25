@@ -45,6 +45,10 @@ angular.module('app', ['ui.router'])
                 servidor.check = true;
         }
 
+        $scope.seleccionar_todos = () => {
+            $scope.servidores.forEach(servidor => servidor.check = true)
+        }
+
         $scope.cancelar = function () {
             $scope.servidores.forEach(servidor => servidor.check = false);
         }
@@ -140,6 +144,10 @@ angular.module('app', ['ui.router'])
                 servidor.check = false;
             else
                 servidor.check = true;
+        }
+
+        $scope.seleccionar_todos = () => {
+            $scope.servidores.forEach(servidor => servidor.check = true)
         }
 
         $scope.cancelar = function () {
