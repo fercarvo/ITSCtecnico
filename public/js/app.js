@@ -9,6 +9,10 @@ angular.module('app', ['ui.router'])
                 templateUrl: '/views/packin_zip.html',
                 controller: 'packin_zip'
             })
+            .state('link_servidores', { //packin_zip
+                templateUrl: '/views/link_servidores.html',
+                controller: 'link_servidores'
+            })
             .state('consola', {
                 templateUrl: '/views/consola.html',
                 controller: 'consola'
@@ -193,6 +197,33 @@ angular.module('app', ['ui.router'])
                 if (data.ok) {
                     $scope.servidores = JSON.parse(text);
                     $scope.servidores.forEach(s => s.check = false)
+                    $scope.$apply();
+                }
+                else
+                    throw new Error(`Status: ${data.status}, ${data.statusText}`);
+
+            } catch (e) {
+                alert("error carga")
+                console.log(e)
+            }
+            
+        }
+
+    }])
+    .controller("link_servidores" ,["$state", "$scope", function($state, $scope){
+
+        $scope.servidores = []
+
+        servidores();
+
+        async function servidores() {
+            try {
+                var data = await fetch('/servidor', {credentials: "same-origin"})
+                var text = await data.text()
+
+                if (data.ok) {
+                    $scope.servidores = JSON.parse(text);
+                    $scope.servidores.forEach(s => s.url += "/webui/" )
                     $scope.$apply();
                 }
                 else

@@ -38,7 +38,8 @@ router.get('/servidor', login.validarSesion, async function (req, res, next) {
         var query = `
             select
                 tb_servidoresidempiere_id as id,
-                name as name
+                name as name,
+                url
             from tb_servidoresidempiere
             where isactive = 'Y'`;
 
