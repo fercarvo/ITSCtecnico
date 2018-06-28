@@ -27,8 +27,7 @@ angular.module('app', ['ui.router'])
             })         
     }])
     .run(["$state", "$http", "$templateCache", function ($state, $http, $templateCache) {
-        loadTemplates($state, "paquete", $http, $templateCache)
-
+        loadTemplates($state, "link_servidores", $http, $templateCache)
 
     }])
     .controller("packin_zip" ,["$state", "$scope", function($state, $scope){
@@ -81,6 +80,9 @@ angular.module('app', ['ui.router'])
 
                 var resultado = await result.json()
 
+                if (result.status === 401)
+                    return location.reload();
+
                 console.log(resultado)
 
                 resultado.subidos.forEach(server => {
@@ -109,27 +111,12 @@ angular.module('app', ['ui.router'])
             }
         }
 
-        servidores();
+        servidores().then(data => {
+            $scope.servidores = data;
+            $scope.servidores.forEach(s => s.check = false)
+            $scope.$apply();
+        })
 
-        async function servidores() {
-            try {
-                var data = await fetch('/servidor', {credentials: "same-origin"})
-                var text = await data.text()
-
-                if (data.ok) {
-                    $scope.servidores = JSON.parse(text);
-                    $scope.servidores.forEach(s => s.check = false)
-                    $scope.$apply();
-                }
-                else
-                    throw new Error(`Status: ${data.status}, ${data.statusText}`);
-
-            } catch (e) {
-                alert("error carga")
-                console.log(e)
-            }
-            
-        }
     }])
     .controller("paquete" ,["$state", "$scope", function($state, $scope){
 
@@ -176,14 +163,15 @@ angular.module('app', ['ui.router'])
                     body: data
                 })
 
+                if (result.status === 401)
+                    return location.reload();
+
                 var resultado = await result.json()
 
                 console.log("resultado", resultado)
                 
                 $scope.resultado.error = resultado.error
-                $scope.resultado.exito = resultado.subidos
-
-                
+                $scope.resultado.exito = resultado.subidos                
                 
             } catch (e) {
                 console.log(e)
@@ -195,54 +183,22 @@ angular.module('app', ['ui.router'])
             }
         }
 
-        servidores();
-
-        async function servidores() {
-            try {
-                var data = await fetch('/servidor', {credentials: "same-origin"})
-                var text = await data.text()
-
-                if (data.ok) {
-                    $scope.servidores = JSON.parse(text);
-                    $scope.servidores.forEach(s => s.check = false)
-                    $scope.$apply();
-                }
-                else
-                    throw new Error(`Status: ${data.status}, ${data.statusText}`);
-
-            } catch (e) {
-                alert("error carga")
-                console.log(e)
-            }
-            
-        }
+        servidores().then(data => {
+            $scope.servidores = data;
+            $scope.servidores.forEach(s => s.check = false)
+            $scope.$apply();
+        })
 
     }])
     .controller("link_servidores" ,["$state", "$scope", function($state, $scope){
 
         $scope.servidores = []
 
-        servidores();
-
-        async function servidores() {
-            try {
-                var data = await fetch('/servidor', {credentials: "same-origin"})
-                var text = await data.text()
-
-                if (data.ok) {
-                    $scope.servidores = JSON.parse(text);
-                    $scope.servidores.forEach(s => s.url += "/webui/" )
-                    $scope.$apply();
-                }
-                else
-                    throw new Error(`Status: ${data.status}, ${data.statusText}`);
-
-            } catch (e) {
-                alert("error carga")
-                console.log(e)
-            }
-            
-        }
+        servidores().then(data => {
+            $scope.servidores = data;
+            $scope.servidores.forEach(s => s.url += "/webui/")
+            $scope.$apply();
+        })
 
     }])
     .controller('consola', ["$scope", function($scope) {
@@ -250,7 +206,6 @@ angular.module('app', ['ui.router'])
         $scope.recargar = function () {
             document.getElementById('terminal_iframe').src = "/terminal/"
         }
-
 
     }])
     .controller('reinicio_server', [function(){
@@ -280,5 +235,25 @@ async function loadTemplates($state, goState, $http, $templateCache) {
     } finally {
         $state.go(goState) ///////////////////////// State inicial
         document.body.style.pointerEvents = "all"
+    }    
+}
+
+async function servidores() {
+    try {
+        var data = await fetch('/servidor', {credentials: "same-origin"})
+        var text = await data.text()
+
+        if (data.ok) {
+            return JSON.parse(text)
+        } else if (data.status === 401){
+            return location.reload()
+        } else {
+            throw new Error(`Status: ${data.status}, ${data.statusText}`);
+        }    
+
+    } catch (e) {
+        alert("error carga: " + e.message)
+        console.log(e)
+        return []
     }    
 }
