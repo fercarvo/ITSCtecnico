@@ -44,13 +44,8 @@ angular.module('app', ['ui.router'])
                 servidor.check = true;
         }
 
-        $scope.seleccionar_todos = () => {
-            $scope.servidores.forEach(servidor => servidor.check = true)
-        }
-
-        $scope.cancelar = function () {
-            $scope.servidores.forEach(servidor => servidor.check = false);
-        }
+        $scope.seleccionar_todos = () => $scope.servidores.forEach(servidor => servidor.check = true);
+        $scope.cancelar = () => $scope.servidores.forEach(servidor => servidor.check = false);
 
         $scope.procesar = async function () {
             $scope.resultado = {}
@@ -59,14 +54,12 @@ angular.module('app', ['ui.router'])
 
             try {
                 if ($scope.servidores.every(s => s.check === false))
-                    throw new Error("Seleccione al menos un servidor");
+                    return alert("Seleccione al menos un servidor");
             
                 var servers = $scope.servidores.filter(s => s.check === true).map(s => s.id);
 
-                var url = new URL(`${document.URL}packin/`)
-                url.search = new URLSearchParams({
-                    servers: servers
-                })
+                var url = new URL(`${document.URL}packin/`);
+                url.search = new URLSearchParams({ servers });
                 var data = new FormData()
                 data.append('file_zip_tecnico', document.getElementById('archivo_zip').files[0])
 
@@ -103,7 +96,7 @@ angular.module('app', ['ui.router'])
                 
             } catch (e) {
                 console.log(e)
-                $scope.resultado.error = e.message
+                $scope.resultado.error.push(e.message)
             } finally {
                 waitingDialog.hide();
                 $scope.$apply()
@@ -133,18 +126,13 @@ angular.module('app', ['ui.router'])
                 servidor.check = true;
         }
 
-        $scope.seleccionar_todos = () => {
-            $scope.servidores.forEach(servidor => servidor.check = true)
-        }
-
-        $scope.cancelar = function () {
-            $scope.servidores.forEach(servidor => servidor.check = false);
-        }
+        $scope.seleccionar_todos = () => $scope.servidores.forEach(servidor => servidor.check = true);
+        $scope.cancelar = () => $scope.servidores.forEach(servidor => servidor.check = false);
 
         $scope.procesar = async function () {
             try {
                 if ($scope.servidores.every(s => s.check === false))
-                    throw new Error("Seleccione al menos un servidor");
+                    return alert("Seleccione al menos un servidor");
             
                 var servers = $scope.servidores.filter(s => s.check === true).map(s => s.id);
 
@@ -175,7 +163,7 @@ angular.module('app', ['ui.router'])
                 
             } catch (e) {
                 console.log(e)
-                $scope.resultado.error = e.message
+                $scope.resultado.error.push(e.message)
             } finally {
                 waitingDialog.hide();
                 $scope.$apply()
@@ -225,7 +213,7 @@ async function loadTemplates($state, goState, $http, $templateCache) {
         for (i = 1; i < states.length; i++) {
             var p = $http.get(states[i].templateUrl, { cache: $templateCache })
             promises.push(p)
-            p.then(function () { }, function (error) { console.log("Error template: ", error) })
+            p.then(() => {}, error => console.log("Error template: ", error))
         }
 
         await Promise.all(promises)
