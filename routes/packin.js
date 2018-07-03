@@ -10,6 +10,8 @@ var host = "https://tecnico.itsc.ec"
 //var host_ip = "http://149.56.109.174:3000";
 
 router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), async function (req, res, next) {
+    req.setTimeout(0);
+
     var newpath = ""
     var subidos = []
     var errores = []
@@ -35,12 +37,15 @@ router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), a
         subidos = results.filter(r => r.resolved).map(r => r.data)
         errores = results.filter(r => !r.resolved).map(r => r.data)
 
+        console.log("errores", errores)
+
         res.json({subidos, error: errores})
     } catch (e) {
-        console.log(e);
+        console.log("Error catch", e);
+        errores.push(e.message)
         res.status(500).json({
             subidos, 
-            error: errores.push(e.message)
+            error: errores
         })
 
     } finally {
