@@ -10,7 +10,6 @@ var host = "https://tecnico.itsc.ec"
 //var host_ip = "http://149.56.109.174:3000";
 
 router.post('/packin', login.validarSesion, upload.single('file_zip_tecnico'), async function (req, res, next) {
-    req.setTimeout(0);
 
     var newpath = ""
     var subidos = []
