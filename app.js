@@ -26,7 +26,13 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser())
 
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/public`, {
+  setHeaders: res => res.setHeader('Cache-Control', 'private, max-age=3600') //60*60
+}))
+app.use((req, res, next) => {
+  res.set('X-Desarrollado-Por', 'Edgar Carvajal efcu93@gmail.com');
+  next()
+})
 
 app.use('/', require('./routes/index'));
 app.use('/', require('./routes/login').router);
