@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-//var { router, readToken } = require('./login')
-//var pty = require('pty.js');
+var { router, readToken } = require('./login')
+var pty = require('pty.js');
 
-/*router.get('/terminal', function(req, res, next) {
+router.get('/terminal', function(req, res, next) {
     res.render('terminal');
-})*/
+})
 
-function socketAuth(socket, next) { /*
+function socketAuth(socket, next) {
     try {
         var cookies = socket.request.headers.cookie;
         readToken(getCookie('session_itsc', cookies))
@@ -17,9 +17,9 @@ function socketAuth(socket, next) { /*
         console.log(e.message)
         next(new Error("401 Unauthorized"))
     }
-*/}
+}
 
-function connectionCB (socket) {/*
+function connectionCB (socket) {
     console.log(`${new Date()} Connection accepted`)
 
     var term = pty.spawn('/usr/bin/env', ['login'], {
@@ -54,7 +54,7 @@ function connectionCB (socket) {/*
             ;
         }
     })
-*/}
+}
 
 //obtiene una cookie de los headers
 function getCookie (name, cookies) {
