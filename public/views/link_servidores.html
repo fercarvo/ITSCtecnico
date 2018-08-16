@@ -11,11 +11,14 @@
           <h3 class="panel-title">Abrir</h3>
         </div>
         <div class="panel-body" style="text-align: center;">
-            <a ng-repeat="server in servidores | orderBy : ['name']" href="{{server.url}}" target="_blank">
-                <button  style="text-align: left; margin: 5px;width: 250px;" class="btn btn-light"> 
-                    <div style="font-weight: bold;">{{$index + 1}}: {{server.name}}</div>
-                </button>
-            </a> 
+            <input type="text" placeholder="Filtrar servidor" style="text-align: left; margin: 5px;width: 250px;" ng-model="filtro_servidor.name" >
+            <div>
+                <a ng-repeat="server in servidores | orderBy : ['name'] | filter:filtro_servidor" href="{{server.url}}" target="_blank">
+                    <button  style="text-align: left; margin: 5px;width: 250px;" class="btn btn-light"> 
+                        <div style="font-weight: bold;">{{$index + 1}}: {{server.name}}</div>
+                    </button>
+                </a> 
+            </div>            
         </div>      
       </div>
   
