@@ -30,7 +30,7 @@
           <h3 class="panel-title">Seleccionar Servidores <button ng-click="seleccionar_todos()" class="btn btn-light">Todos</button></h3>
         </div>
         <div class="panel-body" style="text-align: center;">
-          <input type="text" placeholder="Filtrar servidor" style="text-align: left; margin: 5px;width: 250px;" ng-model="filtro_servidor.name" >
+          <input type="text" autofocus placeholder="Filtrar servidor" style="text-align: left; margin: 5px;width: 250px;" ng-model="filtro_servidor.name" >
           <div>
               <button ng-repeat="server in servidores | orderBy : ['name'] | filter:filtro_servidor" ng-click="seleccionar(server)" style="text-align: left; margin: 5px;width: 250px;" ng-class="server.check ? 'btn btn-dark' : 'btn'"> 
                 <div style="font-weight: bold;">{{$index + 1}}: {{server.name}}</div>
