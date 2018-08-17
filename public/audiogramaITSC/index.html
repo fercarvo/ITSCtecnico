@@ -1522,15 +1522,12 @@ function(i){clearTimeout(a.rotation);a.rotation=setTimeout(function(){var k=b.se
 
 <script>
 var urlParams = new URLSearchParams(window.location.search);
-var AD = JSON.parse(urlParams.get('ad'));
-var OD = JSON.parse(urlParams.get('od'));
-var AI = JSON.parse(urlParams.get('ai'));
-var OI = JSON.parse(urlParams.get('oi'));
-var height = urlParams.get('height') 
-if(AD == undefined) AD = [];
-if(OD == undefined) OD = [];
-if(AI == undefined) AI = [];
-if(OI == undefined) OI = [];
+var AD = urlParams.getAll('ad') || [];
+var AI = urlParams.getAll('ai') || [];
+var OI = urlParams.getAll('oi') || [];
+var OD = urlParams.getAll('od') || [];
+
+var height = urlParams.get('height')
 
 //window.onresize = function(evt) { size(evt) };
 window.onload = function (evt) { size(evt) };
