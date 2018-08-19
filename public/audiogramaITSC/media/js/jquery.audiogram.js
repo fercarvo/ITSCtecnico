@@ -358,7 +358,7 @@
 			 * Puts labels on the x- and y-axes
 			 **/
 			 var drawLabels = function() {
-				ctx.font = "12px 'arial'";
+				ctx.font = "16px 'arial'";
 				ctx.fillStyle = '#000000';
 				
 				// x-axis labels
@@ -884,6 +884,7 @@
 			icon.soundfield.unaided.response.src    = option.imgPath + 'soundfield.unaided.response.png';
 			icon.soundfield.aided.response.src      = option.imgPath + 'soundfield.aided.response.png';
 			icon.soundfield.ci.response.src         = option.imgPath + 'soundfield.ci.response.png';
+
 			/* commented out until icons are made
 			icon.left.air.unmasked.noResponse.src   = option.imgPath + 'left.air.unmasked.noResponse.png';
 			icon.left.air.masked.noResponse.src     = option.imgPath + 'left.air.masked.noResponse.png';
