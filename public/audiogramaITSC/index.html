@@ -33,6 +33,7 @@
 
 		//window.onresize = function(evt) { size(evt) };
 		window.onload = function (evt) { size(evt) };
+		window.onresize = function (e) { window.location.reload() }
 
 		function size (e) {
 			
@@ -63,7 +64,7 @@
 	</script>
 <head>
 <body>
-<table id="idmagico">
+<table id="idmagico" style="display: none;">
 	<thead>
 		<tr>
 			<th>Frecuencia</th>
