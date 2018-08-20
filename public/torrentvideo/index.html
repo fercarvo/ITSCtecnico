@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Video</title>
+    <script src="js/webtorrent.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html { overflow: hidden; }
+        video { background-color: black }
+
+        #files {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #files td, #files th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #files tr:nth-child(even){background-color: #f2f2f2;}
+
+        #files tr:hover {background-color: #ddd;}
+
+        #files th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: grey;
+            color: white;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="media"></div>
+
+    <table id="files">
+        <tr>
+            <th>ID</th>
+            <th>Click file to render</th>
+        </tr>
+    </table>
+    <!--<video src="/test/123.mp4" loop autoplay controls></video>-->
+	<script>
+
+        var magnet = decodeURIComponent( new URL(document.URL).searchParams.get('magnet') )
+        
+        
+    </script>
+    
+    <script>
+        var client = new WebTorrent()
+        var files = null;
+        
+        //magnet = "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent"
+
+
+        magnet = magnet.length > 10 ? magnet : "magnet:?xt=urn:btih:584cb082cb19d81dbabe3e201d89976459d495ea&dn=Black+Panther+(2018)+%5BBluRay%5D+%5B720p%5D+%5BYTS.AM%5D&tr=udp%3A%2F%2F9.rarbg.com%3A2710%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com"
+        magnet = "magnet:?xt=urn:btih:866bdcfa006930a718adbc21d8cae1f2c7f9d8b3&dn=Avengers+Infinity+War+(2018)+%5BBluRay%5D+%5B1080p%5D+%5BYTS.AM%5D&tr=udp%3A%2F%2F9.rarbg.com%3A2710%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com"
+        //magnet = 'magnet:?xt=urn:btih:3f875ba5ca457275bca06f9da42eadcd68ebf52d&dn=123.mp4&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com'
+        //magnet = 'magnet:?xt=urn:btih:f777b06b6c05791dd22eff6e3ad1b66152543a68&dn=js&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com'
+        console.log(magnet, !!magnet)
+
+        function download(el) {
+            
+
+            var width_window = window.innerWidth || document.body.clientWidth;
+            var height_window = window.innerHeight || document.body.clientHeight;
+            var media = document.body
+
+            media.innerHTML = `
+                <style>
+                    #media > * {
+                        height: ${height_window}px;
+                        width: ${width_window}px;
+                    }
+                </style>
+            ` + media.innerHTML
+
+            document.getElementById('files').style.display = "none"
+
+
+
+            var id = el.getElementsByClassName("file_id")[0].innerHTML
+            id = Number(id)
+            var file = files[id]
+            
+            //file.select()
+            console.log(file)
+
+            file.appendTo('#media')
+        }
+
+        client.add(magnet, function (torrent) {
+            console.log(torrent.files)
+            files = torrent.files;
+
+            var table = document.getElementById('files')
+            torrent.files.forEach((file, i) => {
+                table.innerHTML += `
+                    <tr onclick="download(this)">
+                        <td class="file_id">${i}</td>
+                        <td>${file.path}</td>
+                    </tr>
+                `;
+            })
+
+            
+            torrent.deselect(0, torrent.pieces.length - 1, false)
+            torrent.files.forEach(f => f.deselect());
+            //files[0].appendTo('#media')
+            console.log(files[0])		
+        })
+
+    </script>
+</body>
+</html>
