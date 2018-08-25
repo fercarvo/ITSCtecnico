@@ -79,6 +79,8 @@
 
                 .box
                 {
+                    height: 100vh;
+                    width: 100vw;
                     font-size: 1.25rem; /* 20 */
                     background-color: #c8dadf;
                     position: relative;
@@ -263,8 +265,13 @@
     
     <body>
     
-    
-    <div id="media"></div>
+    <style>
+        #media > * {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <div style="display: none;" id="media"></div>
     
     <div class="container" role="main">    
         <form novalidate="" class="box has-advanced-upload" style="display: table; text-align: center;">    
@@ -347,15 +354,9 @@
                 form.dispatchEvent( event );
             };
 
-        form.style.height = height_window+"px"
-        form.style.width = width_window+"px"
+        //form.style.height = height_window+"px"
+        //form.style.width = width_window+"px"
 
-        // letting the server side to know we are going to make an Ajax request
-        var ajaxFlag = document.createElement( 'input' );
-        ajaxFlag.setAttribute( 'type', 'hidden' );
-        ajaxFlag.setAttribute( 'name', 'ajax' );
-        ajaxFlag.setAttribute( 'value', 1 );
-        form.appendChild( ajaxFlag );
 
         // automatically submit the form on file select
         input.addEventListener( 'change', function( e )
@@ -448,17 +449,7 @@
         }
         
         function download(el) {            
-            var media = document.body
-
-            media.innerHTML = `
-                <style>
-                    #media > * {
-                        height: ${height_window}px;
-                        width: ${width_window}px;
-                    }
-                </style>
-            ` + media.innerHTML
-
+            document.getElementById("media").style.display = "block"
             document.getElementById('files').style.display = "none"
             document.getElementsByClassName("container")[0].style.display = "none"
 
