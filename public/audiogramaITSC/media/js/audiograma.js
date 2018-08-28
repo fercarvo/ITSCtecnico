@@ -4,15 +4,20 @@ var AI = urlParams.getAll('ai') || [];
 var OI = urlParams.getAll('oi') || [];
 var OD = urlParams.getAll('od') || [];
 
+var default_size = urlParams.get('size');
 var height = urlParams.get('height');
 
+var resizeId;
 window.onload = function (evt) { size(evt) };
-window.onresize = function (e) { window.location.reload() }
+window.onresize = function (e) { 
+    clearTimeout(resizeId);
+    resizeId = setTimeout(()=> window.location.reload(), 500); 
+}
 
 function size (e) {
     
-    var width_window = window.innerWidth || document.body.clientWidth;
-    var height_window = window.innerHeight || document.body.clientHeight;
+    var width_window = default_size ? default_size : (window.innerWidth || document.body.clientWidth);
+    var height_window = default_size ? default_size : (window.innerHeight || document.body.clientHeight);
 
     var ideal_size = height ? height : 600;
     var final_size = width_window <= height_window ? width_window : height_window;
