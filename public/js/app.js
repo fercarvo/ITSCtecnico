@@ -61,7 +61,7 @@ angular.module('app', ['ui.router'])
                     if (respuesta && "si" === respuesta.toLowerCase()) {
 
                     } else {
-                        return null;
+                        return console.log("Proceso abortado");
                     }
                 }
             
