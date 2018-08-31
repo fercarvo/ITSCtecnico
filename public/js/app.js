@@ -57,7 +57,7 @@ angular.module('app', ['ui.router'])
                     return alert("Seleccione al menos un servidor");
 
                 if ($scope.servidores.filter(s => s.check).length > 2) {
-                    if (confirm("ATENCIÖN: La siguiente acción modificará recursos en MAS de DOS servidores lo cual podria tener graves implicaciones en caso de fallos o cambios no requeridos, está seguro que desea continuar bajo su responsabilidad?")) {
+                    if ("si" === prompt("La siguiente acción modificará recursos en MAS de DOS servidores lo cual podria tener graves implicaciones en caso de fallos o cambios no requeridos, desea continuar (SI/NO)?").toLowerCase()) {
 
                     } else {
                         return;
