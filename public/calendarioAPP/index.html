@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<link href='fullcalendar.min.css' rel='stylesheet' />
+<link href='fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<link rel="stylesheet" href="jquery.qtip.min.css">
+<script src='lib/moment.min.js'></script>
+<script src='lib/jquery.min.js'></script>
+<script src='fullcalendar.min.js'></script>
+<script src="jquery.qtip.min.js"></script>
+<script src="locale/es.js"></script>
+<script>
+
+    $(function() {
+    
+        var urlParams = new URLSearchParams(window.location.search);
+        var eventos_calendario = []
+
+        //default_date=YYYY-MM-DD si no, toma la de hoy
+        var default_date = urlParams.get('default_date')
+        default_date = moment( default_date ).isValid() ? moment(default_date).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
+
+        var url_ejemplo="//app.com/?id=1000000&evt_1000000_title=holamundo&evt_1000000_description=por%20aqui%20sin%20parar&evt_1000000_start=2018-02-26T10:30:22&evt_1000000_end=2018-02-26T22:30:22"
+
+        for (var id of urlParams.getAll('id')) {
+            eventos_calendario.push({
+                id: Number(id),
+                title: decodeURIComponent( urlParams.get(`evt_${id}_title`) || '' ),
+                description: decodeURIComponent( urlParams.get(`evt_${id}_description`) || '' ),
+                start: decodeURIComponent( urlParams.get(`evt_${id}_start`) || '' ), //YYYY-MM-DDThh:mm:ss
+                end: decodeURIComponent( urlParams.get(`evt_${id}_end`) || '' ) //YYYY-MM-DDThh:mm:ss
+            })
+        }
+
+        console.log(eventos_calendario)    
+
+        window.onmessage = function (event) {
+            var origin = event.origin || event.originalEvent.origin
+            var data = event.data
+
+            if (data && data.eventos_calendario) {
+                if (data.refresh) { //Se elimna toda la data y re-renderiza todo
+                    eventos_calendario = data.eventos_calendario
+                    $('#calendar').fullCalendar('removeEvents')
+                    $('#calendar').fullCalendar('addEventSource', eventos_calendario)
+                    $('#calendar').fullCalendar('rerenderEvents')
+                } else { //Se agrega uno por uno cada evento
+                    data.eventos_calendario.forEach(e => $('#calendar').fullCalendar( 'renderEvent', e, true))                
+                    eventos_calendario = [...eventos_calendario, ...data.eventos_calendario]
+                }
+            }
+
+
+            console.log("mensaje de", origin)
+            console.log("Onmessage", data)   
+        }
+
+        $('#calendar').fullCalendar({
+          
+          locale: 'es',
+          height: $(window).height(),
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'listDay,listWeek,month'
+          },
+
+          views: {
+            listDay: { buttonText: 'Día' },
+            listWeek: { buttonText: 'Semana' },
+            month: { buttonText: 'Mes'}
+          },
+
+          defaultView: 'listWeek',
+          defaultDate: default_date,
+          navLinks: true, // can click day/week names to navigate views
+          editable: false,
+          eventLimit: true, // allow "more" link when too many events
+          
+          events: eventos_calendario,
+          eventRender: function(event, element) {
+            element.qtip({
+                content: event.description,
+                position: {
+                  target: 'mouse'
+                },
+            })     
+          }
+        });
+
+
+        $(window).resize(function() {
+            $('#calendar').fullCalendar('option', 'height', $(window).height())
+        })
+  })
+
+</script>
+<style>
+
+  html { overflow: hidden; }
+
+  body {    
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    font-size: 14px;
+  }
+
+  #calendar {
+    margin: 0 auto;
+  }
+
+</style>
+</head>
+<body>
+
+  <div id='calendar'></div>
+
+</body>
+</html>
