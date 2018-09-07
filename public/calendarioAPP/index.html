@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href='fullcalendar.min.css' rel='stylesheet' />
 <link href='fullcalendar.print.min.css' rel='stylesheet' media='print' />
-<link rel="stylesheet" href="jquery.qtip.min.css">
+<link rel="stylesheet" href="jquery.qtip.css">
+<style>
+  .msg-style {
+    font-size: 15px
+  }
+</style>
 <script src='lib/moment.min.js'></script>
 <script src='lib/jquery.min.js'></script>
 <script src='fullcalendar.min.js'></script>
@@ -82,10 +87,16 @@
           events: eventos_calendario,
           eventRender: function(event, element) {
             element.qtip({
-                content: event.description,
+                content: {
+                  title: event.title,
+                  text: event.description
+                },
                 position: {
                   target: 'mouse'
                 },
+                style: {
+                  classes: 'qtip-bootstrap'
+                }
             })     
           }
         });
