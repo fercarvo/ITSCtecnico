@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset='utf-8' />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href='fullcalendar.min.css' rel='stylesheet' />
 <link href='fullcalendar.print.min.css' rel='stylesheet' media='print' />
 <link rel="stylesheet" href="jquery.qtip.min.css">
@@ -21,7 +22,7 @@
         var default_date = urlParams.get('default_date')
         default_date = moment( default_date ).isValid() ? moment(default_date).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
 
-        var url_ejemplo="//app.com/?id=1000000&evt_1000000_title=holamundo&evt_1000000_description=por%20aqui%20sin%20parar&evt_1000000_start=2018-02-26T10:30:22&evt_1000000_end=2018-02-26T22:30:22"
+        var url_ejemplo="http://foo.bar?id=1000000&evt_1000000_title=Comprar%20casa%20grande&evt_1000000_description=El%20cliente%20pidio%20una%20cotizacion%20para%20comprar%20la%20vivienda%20familiar%20de%20urdesa&evt_1000000_start=2018-02-26T10:30:22&evt_1000000_end=2018-02-26T22:30:22&default_date=2018-02-26"
 
         for (var id of urlParams.getAll('id')) {
             eventos_calendario.push({
