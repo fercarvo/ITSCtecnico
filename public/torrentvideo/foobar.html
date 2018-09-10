@@ -259,7 +259,6 @@
         </style>
     
         <!-- remove this if you use Modernizr -->
-        <script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
         <script src="js/webtorrent.min.js"></script>
     </head>
     
@@ -306,7 +305,7 @@
             'wss://tracker.btorrent.xyz', 
             'wss://tracker.openwebtorrent.com', 
             'wss://tracker.fastcast.nz',
-            'ws://localhost:8000'
+            'wss://tracker.webtorrent.io'
         ]
 
         const rtcConfig = {
@@ -353,9 +352,6 @@
                 event.initEvent( 'submit', true, false );
                 form.dispatchEvent( event );
             };
-
-        //form.style.height = height_window+"px"
-        //form.style.width = width_window+"px"
 
 
         // automatically submit the form on file select
