@@ -27,7 +27,8 @@
         var default_date = urlParams.get('default_date')
         default_date = moment( default_date ).isValid() ? moment(default_date).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
 
-        var default_vista = urlParams.get('default_vista') === 'agenda' ? 'agenda' : 'list' 
+        var default_vista = urlParams.get('default_vista') === 'agenda' ? 'agenda' : 'list';
+        var default_choose = urlParams.get('default_choose') === 'semana' ? 'week' : 'month'; 
 
         var url_ejemplo="http://foo.bar?id=1000000&evt_1000000_title=Comprar%20casa%20grande&evt_1000000_description=El%20cliente%20pidio%20una%20cotizacion%20para%20comprar%20la%20vivienda%20familiar%20de%20urdesa&evt_1000000_start=2018-02-26T10:30:22&evt_1000000_end=2018-02-26T22:30:22&default_date=2018-02-26"
 
@@ -80,7 +81,7 @@
             month: { buttonText: 'Mes'}
           },
 
-          defaultView: `${default_vista}Week`,
+          defaultView: default_choose === 'month' ? 'month' : `${default_vista}Week`,
           defaultDate: default_date,
           navLinks: true, // can click day/week names to navigate views
           editable: false,
