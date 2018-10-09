@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  .msg-style {
+    font-size: 15px
+  }
+</style>
+<script src='jquery.min.js'></script>
+<script src="qrcode.js"></script>
+<script src="jquery.qrcode.js"></script>
+<script>
+
+    $(function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var sec = urlParams.get('sec') || '';
+        var label = urlParams.get('label') || '';
+        var issuer = urlParams.get('issuer') || '';
+
+        var width = window.innerWidth || document.body.clientWidth
+        var height = window.innerHeight || document.body.clientHeight
+        var size = width <= height ? width : height;
+
+        var qr = $('#qrcode')
+        qr.qrcode({
+            render	: "canvas",
+            text	: `otpauth://totp/${label}?secret=${sec}&issuer=${issuer}`,
+            width: size,
+            height: size
+        })
+
+        $(window).resize(function() {
+            width = window.innerWidth || document.body.clientWidth
+            height = window.innerHeight || document.body.clientHeight
+
+            size = width <= height ? width : height;
+
+            qr.empty()
+            qr.qrcode({
+                render	: "canvas",
+                text	: `otpauth://totp/${label}?secret=${sec}&issuer=${issuer}`,
+                width: size,
+                height: size
+            })
+        })
+  })
+
+</script>
+<style>
+
+  html { overflow: hidden; }
+
+  body {    
+    margin: 0;
+    padding: 0;
+  }
+
+  #qrcode {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+</style>
+</head>
+<body>
+
+  <div id="qrcode"></div>
+
+</body>
+</html>
