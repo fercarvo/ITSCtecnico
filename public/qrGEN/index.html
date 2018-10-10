@@ -15,9 +15,10 @@
 
     $(function() {
         var urlParams = new URLSearchParams(window.location.search);
-        var sec = urlParams.get('sec') || '';
-        var label = urlParams.get('label') || '';
-        var issuer = urlParams.get('issuer') || '';
+        var values = urlParams.get('values').split('___');
+        var label = values[0];
+        var issuer = values[1];
+        var sec = values[2];
 
         var width = window.innerWidth || document.body.clientWidth
         var height = window.innerHeight || document.body.clientHeight
