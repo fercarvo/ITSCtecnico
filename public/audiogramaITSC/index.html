@@ -5,7 +5,18 @@
 	<title>ITSC audiograma</title>
 
 	<!--<script src="media/js/ba-debug.min.js"></script>-->
-
+	<script>
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('/audiogramaITSC/sw.js', {scope: '/audiogramaITSC/'})
+			.then(function(reg) {
+				// registration worked
+				console.log('Registration succeeded. Scope is ' + reg.scope);
+			}).catch(function(error) {
+				// registration failed
+				console.log('Registration failed with ' + error);
+			});
+		}
+	</script>
 	<script src="media/js/jquery.js"></script>
 	<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>-->
 	<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js"></script>-->
