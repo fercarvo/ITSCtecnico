@@ -4,10 +4,9 @@
 	<meta charset="utf-8">
 	<title>ITSC audiograma</title>
 
-	<!--<script src="media/js/ba-debug.min.js"></script>-->
 	<script>
 		if ('serviceWorker' in navigator) {
-			navigator.serviceWorker.register('/audiogramaITSC/sw.js', {scope: '/audiogramaITSC/'})
+			navigator.serviceWorker.register('/service-worker.js')
 			.then(function(reg) {
 				// registration worked
 				console.log('Registration succeeded. Scope is ' + reg.scope);

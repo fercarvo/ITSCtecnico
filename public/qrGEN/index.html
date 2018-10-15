@@ -8,6 +8,18 @@
     font-size: 15px
   }
 </style>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(function(reg) {
+                // registration worked
+                console.log('Registration succeeded. Scope is ' + reg.scope);
+            }).catch(function(error) {
+                // registration failed
+                console.log('Registration failed with ' + error);
+            });
+    }
+</script>
 <script src='jquery.min.js'></script>
 <script src="qrcode.js"></script>
 <script src="jquery.qrcode.js"></script>
