@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=1,initial-scale=1,user-scalable=1" />
+
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#007bff">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#007bff">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#007bff">
+
+    <title>Reportes Tablas HTML</title>
+    <link rel="stylesheet" href="jquery.dataTables.min.css">
+    <link rel="stylesheet" href="buttons.dataTables.min.css">	
+
+
+</head>
+<body>
+
+    <table id="example" class="display nowrap" style="width:100%">    </table>
+
+    <script src="jquery.js"></script>
+    <script src="jquery.dataTables.min.js"></script>
+    <script src="dataTables.buttons.min.js"></script>
+    <script src="buttons.flash.min.js"></script>
+    <script src="jszip.min.js"></script>
+    <script src="pdfmake.min.js"></script>
+    <script src="vfs_fonts.js"></script>
+    <script src="buttons.html5.min.js"></script>
+    <script src="buttons.print.min.js"></script>
+
+    <script>
+
+        var params = new URLSearchParams(window.location.hash.substr(3))
+        var titulo = params.get('titulo')      
+        
+        document.title = titulo ? titulo : "Reportes HTML"
+
+        var headers = params.get('headers').split('_').map(rec => {
+            return {title: rec}
+        })
+
+        var dataSet = []
+        var _dataset = params.get('contenido').split('_')
+        
+        //Se divide el contenido inicial en arreglos de length igual al header
+        while (_dataset.length) {
+            dataSet.push(_dataset.splice(0, headers.length))
+        }
+        
+        //Si un arreglo es menor, se lo completa con info en blanco
+        dataSet.forEach(fila => {
+            while (fila.length < headers.length)
+                fila.push('')
+        })
+        
+        console.log("By Edgar Carvajal efcu93@gmail.com")
+        console.log('header', headers)
+        console.log('dataset', dataSet)
+
+        $(function() {
+            $('#example').DataTable( {
+                dom: 'Bfrtip',
+                data: dataSet,
+                columns: headers,
+                buttons: [
+                    { extend: 'copy', text: 'Copiar' }, 
+                    'csv', 'excel', 'pdf',
+                    { extend: 'print', text: 'Imprimir' }
+                ],
+                paging: false
+            })
+        })
+    </script>
+</body>
+</html>
