@@ -58,10 +58,27 @@ const qr = [
     '/qrGEN/'
 ]
 
+const tablaGenerica = [
+    '/tablaGenerica/index.html',
+    '/tablaGenerica/',
+    '/tablaGenerica/buttons.dataTables.min.css',
+    '/tablaGenerica/buttons.flash.min.js',
+    '/tablaGenerica/buttons.html5.min.js',
+    '/tablaGenerica/dataTables.buttons.min.js',
+    '/tablaGenerica/dataTables.pageResize.min.js',
+    '/tablaGenerica/jquery.dataTables.min.css',
+    '/tablaGenerica/jquery.dataTables.min.js',
+    '/tablaGenerica/jquery.js',
+    '/tablaGenerica/jszip.min.js',
+    '/tablaGenerica/images/sort_asc.png',
+    '/tablaGenerica/images/sort_both.png',
+    '/tablaGenerica/images/sort_desc.png'
+]
+
 self.addEventListener('install', function (event) {
     event.waitUntil(async function() {
         const cache = await caches.open(CACHE_NAME);
-        await cache.addAll([...audiograma, ...calendario, ...qr])
+        await cache.addAll([...audiograma, ...calendario, ...qr, ...tablaGenerica])
     }())
 })
 
@@ -76,24 +93,27 @@ self.addEventListener('fetch', function(event) {
         // can only be consumed once. Since we are consuming this
         // once by cache and once by the browser for fetch, we need
         // to clone the response
-        var fetchRequest = event.request.clone();
+        
+        //var fetchRequest = event.request.clone();
 
         response = await fetch(fetchRequest)
         // Check if we received a valid response
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-        }
+        
+        //if (!response || response.status !== 200 || response.type !== 'basic') {
+        //    return response;
+        //}
 
         // IMPORTANT: Clone the response. A response is a stream
         // and because we want the browser to consume the response
         // as well as the cache consuming the response, we need
         // to clone it so we have 2 stream.
-        var responseToCache = response.clone();
+        
+        //var responseToCache = response.clone();
 
-        caches.open(CACHE_NAME)
-            .then(function(cache) {
-                cache.put(event.request, responseToCache);
-            })
+        //caches.open(CACHE_NAME)
+        //    .then(function(cache) {
+        //        cache.put(event.request, responseToCache);
+        //    })
 
         return response
     }());
