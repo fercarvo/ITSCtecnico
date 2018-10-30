@@ -13,7 +13,11 @@
 
     <title>Reportes Tablas HTML</title>
     <link rel="stylesheet" href="jquery.dataTables.min.css">
-    <link rel="stylesheet" href="buttons.dataTables.min.css">	
+    <link rel="stylesheet" href="buttons.dataTables.min.css">
+    <style>
+        body {height: 96.5vh;}
+        html { overflow-y: hidden; }
+    </style>	
 
 
 </head>
@@ -23,13 +27,14 @@
 
     <script src="jquery.js"></script>
     <script src="jquery.dataTables.min.js"></script>
+    <script src="dataTables.pageResize.min.js"></script>
     <script src="dataTables.buttons.min.js"></script>
     <script src="buttons.flash.min.js"></script>
     <script src="jszip.min.js"></script>
-    <script src="pdfmake.min.js"></script>
-    <script src="vfs_fonts.js"></script>
+    <!--<script src="pdfmake.min.js"></script>-->
+    <!--<script src="vfs_fonts.js"></script>-->
     <script src="buttons.html5.min.js"></script>
-    <script src="buttons.print.min.js"></script>
+    <!--<script src="buttons.print.min.js"></script>-->
 
     <script>
 
@@ -67,10 +72,28 @@
                 columns: headers,
                 buttons: [
                     { extend: 'copy', text: 'Copiar' }, 
-                    'csv', 'excel', 'pdf',
-                    { extend: 'print', text: 'Imprimir' }
+                    'csv', 'excel'
                 ],
-                paging: false
+                fixedHeader: {
+                    header: true,
+                    footer: true
+                },
+                pageResize: true,
+                language: {
+                    "emptyTable":   	"No existe información para mostrar",
+                    "info":         	"Visualizando del _START_ al _END_ de _TOTAL_ registros",
+                    "infoEmpty":    	"No existe información para mostrar",
+                    "infoFiltered": 	"(Filtrado de _MAX_ registros)",
+                    "lengthMenu":   	"Mostrar _MENU_ registros por página",
+                    "search":       	"Buscar",
+                    "zeroRecords":  	"La busqueda no encontró resultados",
+                    "paginate": {
+                        "first":    	"Primero",
+                        "previous": 	"Anterior",
+                        "next":     	"Siguiente",
+                        "last":     	"Último"
+                    }
+                }
             })
         })
     </script>
