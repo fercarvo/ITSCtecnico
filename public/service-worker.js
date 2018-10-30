@@ -94,26 +94,26 @@ self.addEventListener('fetch', function(event) {
         // once by cache and once by the browser for fetch, we need
         // to clone the response
         
-        //var fetchRequest = event.request.clone();
+        var fetchRequest = event.request.clone();
 
         response = await fetch(fetchRequest)
         // Check if we received a valid response
         
-        //if (!response || response.status !== 200 || response.type !== 'basic') {
-        //    return response;
-        //}
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+        }
 
         // IMPORTANT: Clone the response. A response is a stream
         // and because we want the browser to consume the response
         // as well as the cache consuming the response, we need
         // to clone it so we have 2 stream.
         
-        //var responseToCache = response.clone();
+        var responseToCache = response.clone();
 
-        //caches.open(CACHE_NAME)
-        //    .then(function(cache) {
-        //        cache.put(event.request, responseToCache);
-        //    })
+        caches.open(CACHE_NAME)
+            .then(function(cache) {
+                cache.put(event.request, responseToCache);
+            })
 
         return response
     }());
