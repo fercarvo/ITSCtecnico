@@ -88,10 +88,10 @@ self.addEventListener('fetch', function(event) {
         // Cache hit - return response
 
         if (response) {
-            console.log("desdel el cache", event.request)
+            console.log("desdel el cache", event.request.destination, event.request.url)
             return response
         } else {
-            console.log("No existe cache de", event.request)
+            console.log("No existe cache de", event.request.destination, event.request.url)
             return await fetch(event.request)
         }
         //console.log("No existe cache de", event.request.)
