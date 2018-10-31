@@ -88,6 +88,7 @@ self.addEventListener('fetch', function(event) {
         // Cache hit - return response
 
         if (response) {
+            console.log("desdel el cache", event.request)
             return response
         } else {
             console.log("No existe cache de", event.request)
