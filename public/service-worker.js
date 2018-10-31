@@ -94,12 +94,12 @@ self.addEventListener('fetch', function(event) {
         // once by cache and once by the browser for fetch, we need
         // to clone the response
         
-        var fetchRequest = event.request.clone();
+        //var fetchRequest = event.request.clone();
 
-        response = await fetch(fetchRequest)
+        response = await fetch(event.request)
         // Check if we received a valid response
         
-        if (!response || response.status !== 200 || response.type !== 'basic') {
+        /*if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
         }
 
@@ -113,7 +113,7 @@ self.addEventListener('fetch', function(event) {
         caches.open(CACHE_NAME)
             .then(function(cache) {
                 cache.put(event.request, responseToCache);
-            })
+            })*/
 
         return response
     }());
