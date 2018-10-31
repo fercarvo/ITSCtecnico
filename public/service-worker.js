@@ -87,7 +87,13 @@ self.addEventListener('fetch', function(event) {
         var response = await caches.match(event.request, {ignoreSearch: true, cacheName: CACHE_NAME})
         // Cache hit - return response
 
-        if (response) return response;
+        if (response) {
+            return response
+        } else {
+            console.log("No existe cache de", event.request)
+            return await fetch(event.request)
+        }
+        //console.log("No existe cache de", event.request.)
 
         // IMPORTANT: Clone the request. A request is a stream and
         // can only be consumed once. Since we are consuming this
@@ -96,7 +102,7 @@ self.addEventListener('fetch', function(event) {
         
         //var fetchRequest = event.request.clone();
 
-        response = await fetch(event.request)
+        //response = await fetch(event.request)
         // Check if we received a valid response
         
         /*if (!response || response.status !== 200 || response.type !== 'basic') {
@@ -115,6 +121,6 @@ self.addEventListener('fetch', function(event) {
                 cache.put(event.request, responseToCache);
             })*/
 
-        return response
+        //return response
     }());
 })
