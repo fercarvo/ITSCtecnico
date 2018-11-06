@@ -117,7 +117,8 @@ function callWebService(url_file, file_name, esSistema, server) {
                 'Cache-Control': 'no-cache',
                 'Content-Type': 'text/xml; charset=utf-8' 
             },
-            body: soap 
+            body: soap, 
+            timeout: 60*1000 //Si se demora mas de 1 minuto se cancela la conexion 
         }
     
         request(options, function (error, response, body) {
