@@ -5,7 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var debug = require('debug')('app:server');
 var terminal = require('./routes/terminal')
-var server = app.listen(3000)
+var port = 3001
+var server = app.listen(port)
 
 var io = require('socket.io')(server, {path: '/terminal-connection'});
 io.set('transports', ['websocket']);

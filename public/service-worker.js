@@ -7,7 +7,7 @@
  * Este SW servira para incrementar el performance y reducir el trafico de los aplicativos usados en ITSC
  */
 
-const CACHE_NAME = 'Static-ITSC-v1.0'
+const CACHE_NAME = 'Static-ITSCwebapps-v1.0'
 
 const audiograma = [
     '/audiogramaITSC/index.html',
@@ -78,50 +78,97 @@ const tablaGenerica = [
 self.addEventListener('install', function (event) {
     event.waitUntil(async function() {
         const cache = await caches.open(CACHE_NAME);
-        await cache.addAll([...audiograma, ...calendario, ...qr, ...tablaGenerica])
+        //await cache.addAll([...audiograma, ...calendario, ...qr, ...tablaGenerica])
+        await cache.addAll(['/audiogramaITSC/', '/tablaGenerica/', '/qrGEN/', '/calendarioAPP/'])
     }())
 })
 
-self.addEventListener('fetch', function(event) {
-    event.respondWith(async function () {
-        var response = await caches.match(event.request, {ignoreSearch: true, cacheName: CACHE_NAME})
-        // Cache hit - return response
+self.addEventListener('activate', function(event) {
 
-        if (response) {
-            console.log("desdel el cache", event.request.destination, event.request.url)
-            return response
-        } else {
-            console.log("No existe cache de", event.request.destination, event.request.url)
-            return await fetch(event.request)
-        }
-        //console.log("No existe cache de", event.request.)
+    event.waitUntil(async function () {
+        var cacheNames = await caches.keys() //Todos los cache
+        var toRemove = cacheNames.filter(c => c !== CACHE_NAME) //Se filtra todos los diferentes a CACHE_NAME
+        console.log('[SW] Removiendo caches', toRemove)
 
-        // IMPORTANT: Clone the request. A request is a stream and
-        // can only be consumed once. Since we are consuming this
-        // once by cache and once by the browser for fetch, we need
-        // to clone the response
-        
-        //var fetchRequest = event.request.clone();
-
-        //response = await fetch(event.request)
-        // Check if we received a valid response
-        
-        /*if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-        }
-
-        // IMPORTANT: Clone the response. A response is a stream
-        // and because we want the browser to consume the response
-        // as well as the cache consuming the response, we need
-        // to clone it so we have 2 stream.
-        
-        var responseToCache = response.clone();
-
-        caches.open(CACHE_NAME)
-            .then(function(cache) {
-                cache.put(event.request, responseToCache);
-            })*/
-
-        //return response
-    }());
+        return await Promise.all(toRemove.map(c => caches.delete(c)))
+    }())    
 })
+
+self.addEventListener('fetch', function(event) {
+    const not_cache = [
+        '/login',
+        '/servidor',
+        '/packin',
+        '/terminal',
+        '/terminal-connection',
+        '/logout'
+    ]
+
+    if ( not_cache.some(dir => RegExp(dir).test( event.request.url)) ) //Si alguno es igual al url del request, se ignora el fetchevent
+        return;
+
+    if (RegExp('/views/').test( event.request.url ))
+        return event.respondWith( alwaysCache(event) );
+
+    if (RegExp('/app.js').test( event.request.url ))
+        return event.respondWith( cacheThenNetworkUpdate(event) );
+
+    const destination = event.request.destination;
+
+    switch (destination) {
+        case 'style':
+        case 'script':
+        case 'document':
+        case 'image':
+        case 'font': {
+            event.respondWith( alwaysCache(event) )
+            return;
+        }
+        default: {
+            event.respondWith( cacheThenNetworkUpdate(event) )  
+            return;
+        }
+    }
+})
+
+async function cacheThenNetworkUpdate(event) {
+    var cache = await caches.open(CACHE_NAME)
+    var cacheResponse = await cache.match(event.request, {ignoreSearch: false})
+    var requestToCache = event.request.clone()
+
+    var fetchPromise = fetch(event.request).then(networkResponse => {
+        
+        //Si hay respuesta, pero no es 200 ok, se retorna y no se cachea
+        if (networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+            return networkResponse;
+        }
+
+        let responseToCache = networkResponse.clone()
+        cache.put(requestToCache, responseToCache)
+        console.log('[SW] Guardado en cache', event.request.url)
+
+        return networkResponse;
+    })
+
+    return cacheResponse || fetchPromise
+}
+
+async function alwaysCache (event) {
+    var response = await caches.match(event.request, {ignoreSearch: true, cacheName: CACHE_NAME})
+
+    return response || fetch(event.request).then(networkResponse => {
+        
+        //Si hay respuesta, pero no es 200 ok, se retorna y no se cachea
+        if (networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+            return networkResponse;
+        }
+        
+        let responseToCache = networkResponse.clone()
+        caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache)
+            console.log('[SW] Guardado en cache', event.request.url)
+        })
+
+        return networkResponse;
+    })
+}

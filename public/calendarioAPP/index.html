@@ -3,6 +3,18 @@
 <head>
 <meta charset='utf-8' />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(function(reg) {
+            // registration worked
+            console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(function(error) {
+            // registration failed
+            console.log('Registration failed with ' + error);
+        });
+  }
+</script>
 <link href='fullcalendar.min.css' rel='stylesheet' />
 <link href='fullcalendar.print.min.css' rel='stylesheet' media='print' />
 <link rel="stylesheet" href="jquery.qtip.css">
@@ -11,18 +23,6 @@
     font-size: 15px
   }
 </style>
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(function(reg) {
-              // registration worked
-              console.log('Registration succeeded. Scope is ' + reg.scope);
-          }).catch(function(error) {
-              // registration failed
-              console.log('Registration failed with ' + error);
-          });
-    }
-</script>
 <script src='lib/moment.min.js'></script>
 <script src='lib/jquery.min.js'></script>
 <script src='fullcalendar.min.js'></script>
