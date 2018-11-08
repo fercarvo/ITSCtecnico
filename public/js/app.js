@@ -139,6 +139,10 @@ angular.module('app', ['ui.router'])
         $scope.cancelar = () => $scope.servidores.forEach(servidor => servidor.check = false);
 
         $scope.procesar = async function () {
+            $scope.resultado = {}
+            $scope.resultado.error = null
+            $scope.resultado.exito = []
+
             try {
                 if ($scope.servidores.every(s => s.check === false))
                     return alert("Seleccione al menos un servidor");
