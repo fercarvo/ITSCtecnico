@@ -7,7 +7,7 @@
  * Este SW servira para incrementar el performance y reducir el trafico de los aplicativos usados en ITSC
  */
 
-const CACHE_NAME = 'Static-ITSCwebapps-v1.0'
+const CACHE_NAME = 'Static-ITSCwebapps-v1.1'
 
 const audiograma = [
     '/audiogramaITSC/index.html',
@@ -101,7 +101,8 @@ self.addEventListener('fetch', function(event) {
         '/packin',
         '/terminal',
         '/terminal-connection',
-        '/logout'
+        '/logout',
+        '/'
     ]
 
     if ( not_cache.some(dir => RegExp(dir).test( event.request.url)) ) //Si alguno es igual al url del request, se ignora el fetchevent
