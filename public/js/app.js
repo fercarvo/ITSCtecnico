@@ -247,7 +247,7 @@ async function servidores() {
         if (data.ok) {
             return JSON.parse(text)
         } else if (data.status === 401){
-            return location.reload()
+            return location.replace('/logout/')
         } else {
             throw new Error(`Status: ${data.status}, ${data.statusText}`);
         }    

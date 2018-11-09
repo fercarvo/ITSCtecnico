@@ -101,8 +101,7 @@ self.addEventListener('fetch', function(event) {
         '/packin',
         '/terminal',
         '/terminal-connection',
-        '/logout',
-        '/'
+        '/logout'
     ]
 
     if ( not_cache.some(dir => RegExp(dir).test( event.request.url)) ) //Si alguno es igual al url del request, se ignora el fetchevent
