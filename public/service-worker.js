@@ -7,7 +7,7 @@
  * Este SW servira para incrementar el performance y reducir el trafico de los aplicativos usados en ITSC
  */
 
-const CACHE_NAME = 'Static-ITSCwebapps-v1.1'
+const CACHE_NAME = 'Static-ITSCwebapps-v1.2'
 
 const audiograma = [
     '/audiogramaITSC/index.html',

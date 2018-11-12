@@ -3,6 +3,7 @@
 <head>
 <meta charset='utf-8' />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>By Edgar Carvajal efcu93@gmail.com</title>
 <style>
   .msg-style {
     font-size: 15px
@@ -26,11 +27,15 @@
 <script>
 
     $(function() {
-        var urlParams = new URLSearchParams(window.location.search);
-        var values = urlParams.get('values').split('___');
-        var label = values[0];
-        var issuer = values[1];
-        var sec = values[2];
+        var toQR = window.location.hash
+        var text = toQR.substring(2, toQR.length) //text after #/
+        
+        console.log('By Edgar Carvajal efcu93@gmail.com')
+
+        console.log( 'text to QR with decodeURIComponent("<text here>"):')
+        console.log( decodeURIComponent(text) )
+        console.log( 'text that will be passed: ') 
+        console.log( text )
 
         var width = window.innerWidth || document.body.clientWidth
         var height = window.innerHeight || document.body.clientHeight
@@ -39,7 +44,7 @@
         var qr = $('#qrcode')
         qr.qrcode({
             render	: "canvas",
-            text	: `otpauth://totp/${label}?secret=${sec}&issuer=${issuer}`,
+            text	: text,//`otpauth://totp/${label}?secret=${sec}&issuer=${issuer}`,
             width: size,
             height: size
         })
@@ -53,7 +58,7 @@
             qr.empty()
             qr.qrcode({
                 render	: "canvas",
-                text	: `otpauth://totp/${label}?secret=${sec}&issuer=${issuer}`,
+                text	: text,//`otpauth://totp/${label}?secret=${sec}&issuer=${issuer}`,
                 width: size,
                 height: size
             })
@@ -73,6 +78,7 @@
   #qrcode {
     margin: 0 auto;
     text-align: center;
+    padding-top: calc(50vh - 50%); /*alineacion vertical*/
   }
 
 </style>
