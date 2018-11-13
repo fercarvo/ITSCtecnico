@@ -1,0 +1,1 @@
+En esta carpeta van los archivos .zip que serán enviados a los distintos servidores, se eliminan al terminar el request

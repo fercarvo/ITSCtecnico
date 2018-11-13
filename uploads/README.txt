@@ -1,0 +1,1 @@
+En esta carpeta van los archivos .jar que serán enviados a los distintos servidores, se eliminan al terminar el request
