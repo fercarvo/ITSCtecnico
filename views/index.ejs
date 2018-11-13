@@ -85,39 +85,7 @@
             <span class="nav-link-text">Backup DBs</span>
           </a>
         </li>
-        <!--
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
-          <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
-            <i class="fa fa-fw fa-sitemap"></i>
-            <span class="nav-link-text">Menu Levels</span>
-          </a>
-          <ul class="sidenav-second-level collapse" id="collapseMulti">
-            <li>
-              <a href="#">Second Level Item</a>
-            </li>
-            <li>
-              <a href="#">Second Level Item</a>
-            </li>
-            <li>
-              <a href="#">Second Level Item</a>
-            </li>
-            <li>
-              <a class="nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti2">Third Level</a>
-              <ul class="sidenav-third-level collapse" id="collapseMulti2">
-                <li>
-                  <a href="#">Third Level Item</a>
-                </li>
-                <li>
-                  <a href="#">Third Level Item</a>
-                </li>
-                <li>
-                  <a href="#">Third Level Item</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        -->
+
       </ul>
       <ul class="navbar-nav sidenav-toggler">
         <li class="nav-item">
@@ -135,14 +103,6 @@
             <i class="fa fa-fw fa-sign-out"></i>Salir</a>
         </li>
 
-        <script>
-          function logout() {
-            if (confirm("Esta seguro que desea salir?")) {
-              window.location.replace(`/logout/`)
-            }
-          }
-        </script>
-
       </ul>
 
 
@@ -159,6 +119,18 @@
       <i class="fa fa-angle-up"></i>
     </a>
   </div>
+<script>
+
+    console.log('By Edgar Carvajal efcu93@gmail.com')
+
+    //Elimina la sesion
+    function logout() {
+        if (confirm("Esta seguro que desea salir?")) {
+            window.location.replace(`/logout/`)
+        }
+    }
+
+</script>
 <script src="/js/EventBus.js"></script>
 <script src="/vendor/angular.js"></script>
 <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.10/angular.min.js"></script>-->
