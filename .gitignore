@@ -1,2 +1,5 @@
 node_modules/
+util/*
+packin/*
+uploads/*
 package-lock.json
