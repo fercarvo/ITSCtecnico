@@ -1,0 +1,1 @@
+En esta carpeta van los archivos .zip que serán descargados por los distintos servidores, se eliminaran los archivos una vez enviado el response
