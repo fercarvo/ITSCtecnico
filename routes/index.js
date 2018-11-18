@@ -1,11 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var login = require('./login').router
-var { pool } = require('../util/DB.js');
+var { getAllServers } = require('./tecnico.js')
 
-router.use(function (req, res, next) {
-    res.set('Cache-Control', 'private, max-age=600') //60*10
-    next();
+router.get('/servidor', login.validarSesion, async function (req, res, next) {
+    try {
+        var data  = await getAllServers();
+        res.json(data);
+    } catch (e) {
+        next(e)
+    }
 })
 
 /* GET home page. */
