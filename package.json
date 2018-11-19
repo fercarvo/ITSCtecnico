@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "sudo NODE_ENV=production node app.js",
-    "test": "node app.js"
+    "start": "sudo PORT=3000 NODE_ENV=production node app.js",
+    "test": "node PORT=3333 app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
