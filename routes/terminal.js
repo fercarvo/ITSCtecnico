@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var { router, readToken } = require('./login')
-//var pty = require('pty.js');
+var pty = require('pty.js');
 
 router.get('/terminal', function(req, res, next) {
     res.render('terminal');
@@ -22,11 +22,11 @@ function socketAuth(socket, next) {
 function connectionCB (socket) {
     console.log(`${new Date()} Connection accepted`)
 
-    var term /*= pty.spawn('/usr/bin/env', ['login'], {
+    var term = pty.spawn('/usr/bin/env', ['login'], {
         name: 'xterm-256color',
         cols: 80,
         rows: 30
-    })*/
+    })
 
     console.log(new Date(), `PID=${term.pid} STARTED`)
 
