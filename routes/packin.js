@@ -11,7 +11,7 @@ var { getServerData, rename, callWebService } = require('./tecnico.js')
  * Ruta que recibe un archizo ZIP y lo envia mediante un WebService a los servidores indicados
  */
 router.post('/packin/', login.validarSesion, upload.single('file_zip_tecnico'), async function (req, res, next) {
-    var newpath = ''
+    var newpath = undefined
     
     try {
         var servidores_id = req.query.servers.split(',').map(id => Number(id))
@@ -39,7 +39,8 @@ router.post('/packin/', login.validarSesion, upload.single('file_zip_tecnico'), 
         next(e)
 
     } finally {
-        fs.unlink(newpath, err => err ? console.error("Err Eliminar", err) : '')
+        if (newpath)
+            fs.unlink(newpath, err => err ? console.error("Err Eliminar", err) : console.log('eliminado', newpath))
     }
 })
 
