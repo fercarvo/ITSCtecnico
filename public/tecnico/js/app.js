@@ -81,7 +81,8 @@ angular.module('app', ['ui.router'])
                 if (result.status === 401)
                     return location.reload();
 
-                console.log(resultado)
+                if (result.status !== 200)
+                    throw new Error(await result.text())
 
                 resultado.subidos.forEach(server => {
                     var dom = new DOMParser().parseFromString(server.body, "application/xml");
@@ -100,12 +101,14 @@ angular.module('app', ['ui.router'])
                 $scope.resultado.exito = resultado.subidos                
                 
             } catch (e) {
-                console.log(e)
-                $scope.resultado.error.push(e.message)
+                console.error(e)
+                alert(`Error: ${e}`)
             } finally {
-                waitingDialog.hide();
-                $scope.$apply()
-                $('#resultados_zip_modal').modal('show')
+                setTimeout(function() {
+                    waitingDialog.hide();
+                    $scope.$apply()
+                    $('#resultados_zip_modal').modal('show')
+                }, 500)
             }
         }
 
