@@ -83,7 +83,8 @@ function sendPackage(file, filename, server) {
                         contentType: null 
                     } 
                 } 
-            } 
+            },
+            timeout: 1000*90  //Si se demora mas de 1 minuto y medio se cancela la conexion  
         }
     
         request(options, function (error, response) {

@@ -19,13 +19,9 @@ router.post('/servidor/paquete', login.validarSesion, upload.single('file_jar_te
         var file = fs.createReadStream(file_path); //Se lee el archivo a ser enviado
 
         var data_sv_arr = await getServerData(servidores_id);
-        var resultados = []
 
-        for (var sv of data_sv_arr)
-            resultados.push( await sendPackage(file, req.file.originalname, sv) )
-
-        //var promises = data_sv_arr.map(sv => sendPackage(file, req.file.originalname, sv)) //Se envia en pararelo
-        //var resultados = await Promise.all(promises) //resultados
+        var promises = data_sv_arr.map(sv => sendPackage(file, req.file.originalname, sv)) //Se envia en pararelo
+        var resultados = await Promise.all(promises) //resultados
         
         var subidos = resultados.filter(r => r.resolved) //Servidores de exito
         var error = resultados.filter(r => !r.resolved) //Servidores fallidos
