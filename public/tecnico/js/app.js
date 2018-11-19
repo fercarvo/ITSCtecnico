@@ -2,23 +2,23 @@ angular.module('app', ['ui.router'])
     .config(["$stateProvider", "$compileProvider", function ($stateProvider, $compileProvider) {
         $stateProvider
             .state('paquete', { //packin_zip
-                templateUrl: '/views/paquete.html',
+                templateUrl: '/tecnico/views/paquete.html',
                 controller: 'paquete'
             })
             .state('packin_zip', { //packin_zip
-                templateUrl: '/views/packin_zip.html',
+                templateUrl: '/tecnico/views/packin_zip.html',
                 controller: 'packin_zip'
             })
             .state('link_servidores', { //packin_zip
-                templateUrl: '/views/link_servidores.html',
+                templateUrl: '/tecnico/views/link_servidores.html',
                 controller: 'link_servidores'
             })
             .state('consola', {
-                templateUrl: '/views/consola.html',
+                templateUrl: '/tecnico/views/consola.html',
                 controller: 'consola'
             })  
             .state('backup_db', {
-                templateUrl: '/views/backup_db.html',
+                templateUrl: '/tecnico/views/backup_db.html',
                 controller: 'backup_db'
             })         
     }])
@@ -121,7 +121,7 @@ angular.module('app', ['ui.router'])
         $scope.servidores = []
 
         $scope.resultado = {}
-        $scope.resultado.error = null
+        $scope.resultado.error = []
         $scope.resultado.exito = []
 
         $scope.seleccionar = function (servidor) {
@@ -136,7 +136,7 @@ angular.module('app', ['ui.router'])
 
         $scope.procesar = async function () {
             $scope.resultado = {}
-            $scope.resultado.error = null
+            $scope.resultado.error = []
             $scope.resultado.exito = []
 
             try {
@@ -163,6 +163,9 @@ angular.module('app', ['ui.router'])
                 if (result.status === 401)
                     return location.reload();
 
+                if (result.status !== 200)
+                    throw new Error(await result.text())
+
                 var resultado = await result.json()
 
                 console.log("resultado", resultado)
@@ -171,12 +174,14 @@ angular.module('app', ['ui.router'])
                 $scope.resultado.exito = resultado.subidos                
                 
             } catch (e) {
-                console.log(e)
-                $scope.resultado.error.push(e.message)
+                console.error(e)
+                alert(`Èrror ${e}`)
             } finally {
-                waitingDialog.hide();
-                $scope.$apply()
-                $('#resultados_modal').modal('show')
+                setTimeout(function(){
+                    waitingDialog.hide();
+                    $scope.$apply()
+                    $('#resultados_modal').modal('show')
+                }, 500)
             }
         }
 

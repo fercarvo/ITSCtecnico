@@ -58,21 +58,26 @@
                   </thead>
                   <tbody>
                     <tr ng-repeat="server in resultado.exito">
-                      <td>{{server}}</td>
+                      <td>{{server.servidor}}</td>
                     </tr>
                   </tbody>
                 </table>
                 
 
-                <table class="table table-striped" ng-show="resultado.error ? true : false">
+                <table class="table table-striped" ng-show="resultado.error.length > 0 ? true : false">
                     <thead id="tblHead">
                       <tr>
+                        <th>Errores</th>
+                      </tr>
+                      <tr>
+                        <th>Server</th>
                         <th>Error</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>{{resultado.error}}</td>
+                      <tr ng-repeat="server in resultado.error">
+                        <td>{{server.servidor}}</td>
+                        <td>{{server.data}}</td>
                       </tr>
                     </tbody>
                   </table>
