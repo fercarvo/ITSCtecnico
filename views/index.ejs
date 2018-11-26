@@ -37,9 +37,6 @@
         console.log('Registration failed with ' + error);
       });
     }
-
-    document.body.style.pointerEvents = "none" //Se desactivan todos los clicks hasta que se carge toda la data
-
   </script>
 </head>
 
@@ -125,6 +122,9 @@
             window.location.replace(`/logout/`)
         }
     }
+
+    document.body.style.pointerEvents = "none" //Se desactivan todos los clicks hasta que se carge toda la data
+
 
 </script>
 <script src="/tecnico/js/EventBus.js"></script>
