@@ -1,0 +1,15 @@
+{
+    "background_color": "#071625",
+    "description": "ITSC TÉCNICO App by Edgar Carvajal",
+    "display": "standalone",
+    "icons": [
+      {
+        "src": "/icono-app.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ],
+    "name": "ITSC TÉCNICO App by EC",
+    "short_name": "TÉCNICO",
+    "start_url": "/"
+}

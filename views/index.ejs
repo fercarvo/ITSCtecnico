@@ -4,9 +4,20 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta name="theme-color" content="#071625">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#071625">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#071625">
+
+  <link rel="manifest" href="/manifest.webmanifest">
+
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="author" content="Edgar Carvajal efcu93@gmail.com">
+  
   <title>TÉCNICO  </title>
   <!-- Bootstrap core CSS-->
   <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">-->
@@ -24,6 +35,83 @@
       .modal-body{
           max-height: calc(100vh - 200px);
           overflow-y: auto;
+      }
+
+      .boton-itsc {
+        background: #d6d6d6 !important;
+      }
+
+      .bg-dark {
+          background-color: #071625!important;
+      }
+
+      body:-moz-full-screen {
+          background-color: #fff !important;
+      }
+      body:-webkit-full-screen {
+          background-color: #fff !important;
+      }
+      body:fullscreen {
+          background-color: #fff !important;
+      }
+      body:-ms-fullscreen {
+          background-color: #fff !important;
+      }
+
+      .modal-lg {
+          max-width: 85% !important;
+      }
+
+
+
+      @media only screen and (max-width: 800px) {
+          
+          /* Force table to not be like tables anymore */
+          .no-more-tables table, 
+          .no-more-tables thead, 
+          .no-more-tables tbody, 
+          .no-more-tables th, 
+          .no-more-tables td, 
+          .no-more-tables tr { 
+              display: block; 
+          }
+      
+          /* Hide table headers (but not display: none;, for accessibility) */
+          .no-more-tables thead tr { 
+              position: absolute;
+              top: -9999px;
+              left: -9999px;
+          }
+      
+          .no-more-tables tr { border: 1px solid #ccc; }
+      
+          .no-more-tables td { 
+              /* Behave  like a "row" */
+              border: none;
+              border-bottom: 1px solid #eee; 
+              position: relative;
+              padding-left: 40%; 
+              white-space: normal;
+              text-align:left;
+          }
+      
+          .no-more-tables td:before { 
+              /* Now like a table header */
+              position: absolute;
+              /* Top/left values mimic padding */
+              top: 6px;
+              left: 6px;
+              width: 38%; 
+              padding-right: 10px; 
+              white-space: nowrap;
+              text-align:left;
+              font-weight: bold;
+          }
+      
+          /*
+          Label the data
+          */
+          .no-more-tables td:before { content: attr(data-title); }
       }
     </style>
   <script>
@@ -53,7 +141,7 @@
 
         <li class="nav-item" data-toggle="tooltip" data-placement="right" ui-sref-active="active" ui-sref="paquete" title="Subir Paquete">
           <a class="nav-link" >
-            <i class="fa fa-fw fa-upload"></i>
+            <i class="fa fa-fw fa-file-code-o"></i>
             <span class="nav-link-text">JARs</span>
           </a>
         </li>
@@ -67,14 +155,14 @@
 
         <li class="nav-item" data-toggle="tooltip" data-placement="right" ui-sref-active="active" ui-sref="packin_zip" title="Packins">
           <a class="nav-link">
-            <i class="fa fa-fw fa-server"></i>
+            <i class="fa fa-fw fa-file-archive-o"></i>
             <span class="nav-link-text">ZIPs</span>
           </a>
         </li>
 
         <li class="nav-item" data-toggle="tooltip" data-placement="right" ui-sref-active="active" ui-sref="link_servidores" title="Link Servidores">
           <a class="nav-link">
-            <i class="fa fa-fw fa-server"></i>
+            <i class="fa fa-fw fa-link"></i>
             <span class="nav-link-text">Zelda Servidores</span>
           </a>
         </li>
@@ -145,6 +233,16 @@
 <script src="/tecnico/js/esperar.js"></script>
 <script src="/tecnico/js/sb-admin.js"></script>
 <script src="/tecnico/js/app.js"></script>
+<script>
+  $('.nav-item').on('click', function() {
+      var element =  $('.navbar-toggler-right')
+
+      if ( element.is(":visible") ) {
+          element.click()
+      } 
+  })
+
+</script>
 </body>
 
 </html>
