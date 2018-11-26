@@ -16,11 +16,7 @@ angular.module('app', ['ui.router'])
             .state('consola', {
                 templateUrl: '/tecnico/views/consola.html',
                 controller: 'consola'
-            })  
-            .state('backup_db', {
-                templateUrl: '/tecnico/views/backup_db.html',
-                controller: 'backup_db'
-            })         
+            })          
     }])
     .run(["$state", "$http", "$templateCache", function ($state, $http, $templateCache) {
         loadTemplates($state, "link_servidores", $http, $templateCache)
@@ -76,13 +72,13 @@ angular.module('app', ['ui.router'])
                     body: data
                 })
 
-                var resultado = await result.json()
-
                 if (result.status === 401)
                     return location.reload();
 
                 if (result.status !== 200)
                     throw new Error(await result.text())
+
+                var resultado = await result.json()
 
                 resultado.subidos.forEach(server => {
                     var dom = new DOMParser().parseFromString(server.body, "application/xml");
@@ -213,10 +209,7 @@ angular.module('app', ['ui.router'])
         }
 
     }])
-    .controller('backup_db', [function(){
-        console.log("reinicio servidor...")
 
-    }])
     
 async function loadTemplates($state, goState, $http, $templateCache) {
     try {
@@ -239,6 +232,10 @@ async function loadTemplates($state, goState, $http, $templateCache) {
     }    
 }
 
+/**
+ * Funcion que retorna una lista de servidores disponibles
+ * @returns {Promise<Array<{id:number, name:string, url:string}>>} servidores iDempiere
+ */
 async function servidores() {
     try {
         var data = await fetch('/servidor', {credentials: "same-origin"})
@@ -254,7 +251,7 @@ async function servidores() {
 
     } catch (e) {
         alert("error carga: " + e.message)
-        console.log(e)
+        console.error(e)
         return []
     }    
 }

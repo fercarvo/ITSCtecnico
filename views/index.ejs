@@ -37,6 +37,9 @@
         console.log('Registration failed with ' + error);
       });
     }
+
+    document.body.style.pointerEvents = "none" //Se desactivan todos los clicks hasta que se carge toda la data
+
   </script>
 </head>
 
@@ -76,13 +79,6 @@
           <a class="nav-link">
             <i class="fa fa-fw fa-server"></i>
             <span class="nav-link-text">Zelda Servidores</span>
-          </a>
-        </li>
-
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" ui-sref-active="active" ui-sref="backup_db" title="Backup DBs">
-          <a class="nav-link">
-            <i class="fa-fw fa fa-database"></i>
-            <span class="nav-link-text">Backup DBs</span>
           </a>
         </li>
 
