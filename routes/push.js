@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var login = require('./login').router
 
+//https://thecodebarbarian.com/sending-web-push-notifications-from-node-js.html
+
 const webpush = require('web-push');
 const { PUBLIC_VAPID_KEY, PRIVATE_VAPID_KEY } = require('../util/DB.js');
 
