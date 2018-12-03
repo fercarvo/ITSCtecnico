@@ -19,6 +19,53 @@
   <meta name="author" content="Edgar Carvajal efcu93@gmail.com">
   
   <title>TÉCNICO  </title>
+  <script>
+      function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+    
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+    
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+      return outputArray;
+  }
+
+
+  async function run() {
+      const publicVapidKey = 'BCb1jyat4rdKFNpia7hHScB-UiMgNEZd5ip81S69kDQJrXntVu-ArG8WHCuTA02o2bDxwDlMEnEjwqPgThFH2ZI';
+      
+      console.log('Registering service worker');
+      const registration = await navigator.serviceWorker.register('/service-worker.js')
+      console.log('Registered service worker');
+
+      console.log('Registering push');
+      const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+      });
+      console.log('Registered push');
+
+      console.log('Sending push');
+      await fetch('/subscribe', {
+        method: 'POST',
+        body: JSON.stringify(subscription),
+        headers: {
+          'content-type': 'application/json'
+        }
+      });
+      console.log('Sent push');
+  }
+    if ('serviceWorker' in navigator) {
+      
+      run().catch(e => console.error(e))
+
+    }
+  </script>
   <!-- Bootstrap core CSS-->
   <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">-->
   <link rel="stylesheet" href="/tecnico/vendor/bootstrap.min.css">
@@ -114,21 +161,11 @@
           .no-more-tables td:before { content: attr(data-title); }
       }
     </style>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-      .then(function(reg) {
-        // registration worked
-        console.log('Registration succeeded. Scope is ' + reg.scope);
-      }).catch(function(error) {
-        // registration failed
-        console.log('Registration failed with ' + error);
-      });
-    }
-  </script>
+
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top" ng-app="app">
+
 
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
@@ -241,6 +278,8 @@
           element.click()
       } 
   })
+
+
 
 </script>
 </body>
