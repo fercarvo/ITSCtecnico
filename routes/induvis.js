@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var { requestWS } = require('nodejs_idempierewebservice')
+var { induvis } = require('../util/DB.js');
 
 //var { getServerData, sendPackage } = require('./tecnico.js')
 
@@ -43,20 +44,27 @@ router.post('/induvis/rest_test/', async function (req, res, next) {
 router.post('/induvis/confirmacion/crear/', async function (req, res, next) {
     
     var payload = req.body
+    console.log('payload', payload)
 
-    try {
+    var params = [
+        {
+            column: 'M_InOut_ID', 
+            val: payload.m_inout_id
+        },{
+            column: 'Description', 
+            val: payload.descripcion
+        }
+    ]
 
-        console.log('payload', payload)
+    requestWS( induvis.host, 'crear_confirmacion_ws', payload.ctx, params)
+        .then(res => {
+            console.log('respuesta WS', res)
+            res.json({ exito: true, msg: res })
 
-        res.json({
-            exito: true,
-            msg: 'Beta test',
+        }).catch(err => {
+            console.log('Error ws', err)
+            res.json({exito: false, msg: err})
         })
-
-    } catch (e) {
-        console.log('Error', e)
-        res.json({ exito: false , msg: `${e}` })
-    }
 })
 
 module.exports = router;
