@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var { requestWS } = require('nodejs_idempierewebservice')
+
 //var { getServerData, sendPackage } = require('./tecnico.js')
 
 router.use(function (req, res, next) {
@@ -35,6 +37,25 @@ router.post('/induvis/rest_test/', async function (req, res, next) {
     } catch (e) {
         console.log('error al leer info', e);
         res.json({mensaje: `error al leer la informacion en JSON -> ${e}`, foo: true, })
+    }
+})
+
+router.post('/induvis/confirmacion/crear/', async function (req, res, next) {
+    
+    var payload = req.body
+
+    try {
+
+        console.log('payload', payload)
+
+        res.json({
+            exito: true,
+            msg: 'Beta test',
+        })
+
+    } catch (e) {
+        console.log('Error', e)
+        res.json({ exito: false , msg: `${e}` })
     }
 })
 
