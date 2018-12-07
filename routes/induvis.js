@@ -45,6 +45,11 @@ router.post('/induvis/confirmacion/crear/', async function (req, res, next) {
 
     try {
         var payload = req.body
+
+        if (typeof payload === 'string' || payload instanceof String) {
+            payload = JSON.parse(payload)
+        }
+
         console.log('payload', payload)
     
         var params = [
