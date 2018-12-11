@@ -16,6 +16,7 @@
     "morgan": "~1.9.0",
     "multer": "^1.3.0",
     "nodejs_idempierewebservice": "https://github.com/fercarvo/nodejs_idempierewebservice/tarball/master",
+    "nodemailer": "^4.7.0",
     "pg": "^7.4.3",
     "pty.js": "^0.3.1",
     "request": "^2.87.0",

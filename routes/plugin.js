@@ -14,7 +14,7 @@ router.post('/servidor/paquete', login.validarSesion, upload.single('file_jar_te
     var file_path = undefined
 
     try {        
-        var file_path = req.file.path
+        file_path = req.file.path
         var servidores_id = req.query.servers.split(',').map(id => Number(id))
         var file = fs.createReadStream(file_path); //Se lee el archivo a ser enviado
 

@@ -14,9 +14,13 @@ angular.module('app', ['ui.router'])
                 controller: 'link_servidores'
             })
             .state('consola', {
-                templateUrl: '/tecnico/views/consola.html',
+                templateUrl: '/tecnico/views/consola.html', //impresion_itsc
                 controller: 'consola'
-            })          
+            })
+            .state('impresion_itsc', {
+                templateUrl: '/tecnico/views/print.html', //impresion_itsc
+                controller: 'impresion_itsc'
+            })            
     }])
     .run(["$state", "$http", "$templateCache", function ($state, $http, $templateCache) {
         loadTemplates($state, "link_servidores", $http, $templateCache)
@@ -207,6 +211,9 @@ angular.module('app', ['ui.router'])
         $scope.recargar = function () {
             document.getElementById('terminal_iframe').src = "/terminal/"
         }
+
+    }])
+    .controller('impresion_itsc', ["$scope", function($scope) {
 
     }])
 

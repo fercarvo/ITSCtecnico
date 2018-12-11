@@ -21,7 +21,7 @@ router.validarSesion = function (req, res, next) {
         next()
 
     } catch (e) {
-        console.log(e)
+        
         if (req.url === '/')
             return res.redirect('/login/')
         
