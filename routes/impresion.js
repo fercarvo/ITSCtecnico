@@ -15,10 +15,11 @@ router.post('/print_itsc/', login.validarSesion, upload.single('file_pdf_tecnico
     var file_path = undefined
     
     try {
+        file_path = req.file.path
+
         if (!impresion)
             throw new Error('Impresion ITSC no configurada');
 
-        file_path = req.file.path
         let transporter = nodemailer.createTransport({
             host: impresion.smtp_host,
             port: impresion.smtp_port,
