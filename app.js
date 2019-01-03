@@ -7,6 +7,16 @@ var debug = require('debug')('app:server');
 var terminal = require('./routes/terminal')
 var port = Number(process.env.PORT || 3000)
 var server = app.listen(port)
+var os = require('os')
+var fs = require('fs')
+
+try {
+    if (!fs.existsSync(`${os.tmpdir()}/tecnico`)){
+        fs.mkdirSync(`${os.tmpdir()}/tecnico`);
+    }
+} catch (e) {
+    console.error('no se pudo crear /tmp/tecnico', e)
+}
 
 var io = require('socket.io')(server, {path: '/terminal-connection'});
 io.set('transports', ['websocket']);
@@ -26,6 +36,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser())
+
+app.use('/temporal', express.static(`${os.tmpdir()}/tecnico`))
 
 app.use(express.static(`${__dirname}/public`, {
     setHeaders: res => {
