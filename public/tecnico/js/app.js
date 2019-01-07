@@ -257,9 +257,6 @@ angular.module('app', ['ui.router'])
                     var exito = resultado.subidos[0]
                     var error = resultado.error[0]
 
-                    console.log("exito", exito)
-                    console.log("exito", error)
-
                     if (exito !== undefined) {
                         $scope.resultado.exito.push( file.name )
                     } else {
@@ -274,7 +271,6 @@ angular.module('app', ['ui.router'])
                 console.error(e)
                 alert(`Èrror ${e}`)
             } finally {
-                console.log("resultado bla bla", $scope.resultado)
                 setTimeout(function(){
                     waitingDialog.hide();
                     $scope.$apply()
