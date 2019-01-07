@@ -5,6 +5,10 @@ angular.module('app', ['ui.router'])
                 templateUrl: '/tecnico/views/paquete.html',
                 controller: 'paquete'
             })
+            .state('multi_jars', { //packin_zip
+                templateUrl: '/tecnico/views/multi_jars.html',
+                controller: 'multi_jars'
+            })
             .state('packin_zip', { //packin_zip
                 templateUrl: '/tecnico/views/packin_zip.html',
                 controller: 'packin_zip'
@@ -180,6 +184,97 @@ angular.module('app', ['ui.router'])
                 console.error(e)
                 alert(`Èrror ${e}`)
             } finally {
+                setTimeout(function(){
+                    waitingDialog.hide();
+                    $scope.$apply()
+                    $('#resultados_modal').modal('show')
+                }, 500)
+            }
+        }
+
+        servidores().then(data => {
+            $scope.servidores = data;
+            $scope.servidores.forEach(s => s.check = false)
+            $scope.$apply();
+        })
+
+    }])
+    .controller("multi_jars" ,["$state", "$scope", function($state, $scope){
+
+        $scope.servidores = []
+
+        $scope.resultado = {}
+        $scope.resultado.error = []
+        $scope.resultado.exito = []
+
+        $scope.seleccionar = function (servidor) {
+            if (servidor.check)
+                servidor.check = false;
+            else
+                servidor.check = true;
+        }
+
+        $scope.cancelar = () => $scope.servidores.forEach(servidor => servidor.check = false);
+
+        $scope.procesar = async function () {
+            $scope.resultado = {}
+            $scope.resultado.error = []
+            $scope.resultado.exito = []
+
+            if ($scope.servidores.filter(s => s.check === true).length !== 1)
+                return alert('Debe haber solo 1 servidor seleccionado');
+
+            try {
+            
+                var servers = $scope.servidores.filter(s => s.check === true).map(s => s.id);
+                var files =  document.getElementById('archivo').files
+
+                waitingDialog.show(`Cargando ${files.length} paquetes`);
+                
+                for (var file of files) {
+                    var url = new URL(`${document.URL}servidor/paquete`)
+                    url.search = new URLSearchParams({
+                        servers: servers
+                    })
+                    var data = new FormData()
+                    data.append('file_jar_tecnico', file)
+
+                    waitingDialog.message(`Subiendo ${file.name}`);
+
+                    var result = await fetch(url, {
+                        credentials: "same-origin",
+                        method: 'POST',
+                        body: data
+                    })
+
+                    if (result.status === 401)
+                        return location.reload();
+
+                    if (result.status !== 200)
+                        throw new Error(await result.text())
+
+                    var resultado = await result.json()
+                    var exito = resultado.subidos[0]
+                    var error = resultado.error[0]
+
+                    console.log("exito", exito)
+                    console.log("exito", error)
+
+                    if (exito !== undefined) {
+                        $scope.resultado.exito.push( file.name )
+                    } else {
+                        $scope.resultado.error.push({
+                            archivo: file.name,
+                            data: error.data
+                        })
+                    }                    
+                }                    
+                
+            } catch (e) {
+                console.error(e)
+                alert(`Èrror ${e}`)
+            } finally {
+                console.log("resultado bla bla", $scope.resultado)
                 setTimeout(function(){
                     waitingDialog.hide();
                     $scope.$apply()

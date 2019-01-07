@@ -1,0 +1,90 @@
+<h3 style="text-align: center;">
+    ITSC Multi .jar
+</h3>
+
+<form ng-submit="procesar()" class="container">
+
+    <div class="form-row">
+    <div class="form-group">
+        <label>Seleccione uno o varios JAR</label>
+        <input class="form-control-file" id="archivo" required type="file" multiple accept="application/java-archive, .jar">
+    </div>
+
+    </div>
+
+    <div class="form-row">
+    <div class="form-group col-md-8">
+        <button type="submit" class="btn btn-dark">Aceptar</button>
+        <button type="reset" ng-click="cancelar()" class="btn btn">Cancelar</button>
+    </div>
+    </div>
+</form>
+
+<p></p>
+<p></p>
+<div style="text-align: left;">
+    
+    <div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Seleccionar un servidor</h3>
+    </div>
+    <div class="panel-body" style="text-align: center;">
+        <input type="text" autofocus placeholder="Filtrar servidor" style="text-align: left; margin: 5px;width: 250px;" ng-model="filtro_servidor.name" >
+        <div>
+            <button ng-repeat="server in servidores | orderBy : ['name'] | filter:filtro_servidor" ng-click="seleccionar(server)" style="text-align: left; margin: 5px;width: 250px;" ng-class="server.check ? 'btn btn-dark' : 'btn'"> 
+            <div style="font-weight: bold;">{{$index + 1}}: {{server.name}}</div>
+            </button>
+        </div>  
+    </div>      
+    </div>
+
+</div>
+
+<div class="modal fade" id="resultados_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Resultados</h5>               
+            </div>
+
+            <div class="modal-body">
+                <table class="table table-striped" ng-show="resultado.exito.length > 0 ? true : false">
+                    <thead id="tblHead">
+                    <tr>
+                        <th>JARs Exitosos</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="archivo in resultado.exito">
+                        <td>{{archivo}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                
+
+                <table class="table table-striped" ng-show="resultado.error.length > 0 ? true : false">
+                    <thead id="tblHead">
+                        <tr>
+                        <th>Errores</th>
+                        </tr>
+                        <tr>
+                        <th>Archivo</th>
+                        <th>Error</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="server in resultado.error">
+                        <td>{{server.archivo}}</td>
+                        <td>{{server.data}}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+                
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

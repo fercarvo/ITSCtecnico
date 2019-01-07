@@ -56,7 +56,7 @@ app.use('/', require('./routes/login').router);
 app.use('/', terminal.router);
 app.use('/', require('./routes/packin'));
 app.use('/', require('./routes/plugin'));
-app.use('/', require('./routes/impresion'));
+//app.use('/', require('./routes/impresion'));
 app.use('/', require('./routes/induvis'));
 
 // catch 404 and forward to error handler
