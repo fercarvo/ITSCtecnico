@@ -54,6 +54,8 @@ function socketAuth(socket, next) {
     var server = socket.handshake.query.server;
     var secret = socket.handshake.query.secret;
 
+    console.log(server, secret)
+
     if (server && server.length > 1 && secret === tecnico_tech_secret) {
         if (conectados.has(server)) {
             console.error('[socketAuth]', new Date(), `[ya existe un cliente con nombre ${server}]`)
