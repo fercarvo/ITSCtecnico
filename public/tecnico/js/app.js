@@ -22,8 +22,12 @@ angular.module('app', ['ui.router'])
                 controller: 'consola'
             })
             .state('impresion_itsc', {
-                templateUrl: '/tecnico/views/print.html', //impresion_itsc
+                templateUrl: '/tecnico/views/print.html', //impresion_itsc server_admin
                 controller: 'impresion_itsc'
+            })   
+            .state('server_admin', {
+                templateUrl: '/tecnico/views/server_admin.html', //impresion_itsc server_admin
+                controller: 'server_admin'
             })            
     }])
     .run(["$state", "$http", "$templateCache", function ($state, $http, $templateCache) {
@@ -297,6 +301,77 @@ angular.module('app', ['ui.router'])
         })
 
     }])
+    .controller("server_admin" ,["$state", "$scope", function($state, $scope){
+
+        $scope.servidores = []
+        $scope.acciones = ["restart_idempiere", "restart_postgresql"]
+
+        servidores_admin().then(data => {
+            $scope.servidores = data;
+            $scope.servidores.map(s => {
+                return {name: s, check: false}
+            })
+            $scope.$apply();
+        })
+
+        $scope.procesar = async function (accion) {
+            console.log(accion)
+
+            if ($scope.servidores.filter(s => s.check === true).length !== 1)
+                return alert('Debe haber solo 1 servidor seleccionado');
+
+            try {
+        
+                var server = $scope.servidores.filter(s => s.check === true).map(s => s.name);
+                server = server[0];
+
+                waitingDialog.show(`Ejecutando acción`);
+                
+                var url = new URL(`${document.URL}server_admin/${server}`)
+                var data = {tipo: accion}
+
+                var result = await fetch(url, {
+                    credentials: "same-origin",
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                })
+
+                if (result.status === 401)
+                    return location.reload();
+
+                if (result.status !== 200)
+                    throw new Error(await result.text())
+
+                var resultado = await result.text()
+
+                $scope.resultado = resultado                  
+                
+            } catch (e) {
+                console.error(e)
+                alert(`Èrror ${e}`)
+            } finally {
+                setTimeout(function(){
+                    waitingDialog.hide();
+                    $scope.$apply()
+                    $('#resultados_modal').modal('show')
+                }, 500)
+            }
+        }
+
+        $scope.seleccionar = function (servidor) {
+            if (servidor.check)
+                servidor.check = false;
+            else
+                servidor.check = true;
+        }
+
+        $scope.seleccionar_todos = () => $scope.servidores.forEach(servidor => servidor.check = true);
+        $scope.cancelar = () => $scope.servidores.forEach(servidor => servidor.check = false);
+
+    }])
     .controller('consola', ["$scope", function($scope) {
 
         $scope.recargar = function () {
@@ -337,6 +412,30 @@ async function loadTemplates($state, goState, $http, $templateCache) {
 async function servidores() {
     try {
         var data = await fetch('/servidor', {credentials: "same-origin"})
+        var text = await data.text()
+
+        if (data.ok) {
+            return JSON.parse(text)
+        } else if (data.status === 401){
+            return location.replace('/logout/')
+        } else {
+            throw new Error(`Status: ${data.status}, ${data.statusText}`);
+        }    
+
+    } catch (e) {
+        alert("error carga: " + e.message)
+        console.error(e)
+        return []
+    }    
+}
+
+/**
+ * Funcion que retorna una lista de servidores disponibles para administrar
+ * @returns {Promise<Array<{string}>>} Nombre servidores admin
+ */
+async function servidores_admin () {
+    try {
+        var data = await fetch('/server_admin/listar', {credentials: "same-origin"})
         var text = await data.text()
 
         if (data.ok) {

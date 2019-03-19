@@ -9,7 +9,7 @@ var conectados = new Map(); //Clientes/servidores conectados
 router.get('/server_admin/listar', login.validarSesion, async function(req, res, next) {
     try {
         var clientes = [...conectados.keys()]
-        res.json({clientes})
+        res.json(clientes)
         
     } catch (e) {
         console.error(e)
@@ -30,13 +30,13 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
         var cliente = conectados.get(req.params.cliente)
 
         if (cliente === undefined) 
-            return res.status(400).send(`No se encuentra conectado el cliente con nombre ${req.params.cliente}`);
+            return res.send(`No se encuentra conectado el cliente con nombre ${req.params.cliente}`);
 
         var respuesta = await new Promise(resolve => {
             cliente.emit('pavimento', { tipo }, socket_res => resolve(socket_res))
         })
         
-        return res.json({respuesta})
+        return res.send(respuesta)
 
     } catch (e) {
         console.error(e)
@@ -54,14 +54,12 @@ function socketAuth(socket, next) {
     var server = socket.handshake.query.server;
     var secret = socket.handshake.query.secret;
 
-    console.log(server, secret)
-
     if (server && server.length > 1 && secret === tecnico_tech_secret) {
         if (conectados.has(server)) {
             console.error('[socketAuth]', new Date(), `[ya existe un cliente con nombre ${server}]`)
             next(new Error(`Cliente: ${server} DUPLICADO`))
         } else {
-            console.log('[socketAuth]', new Date(), `[Nuevo server, nombre ${server}]`)
+            console.log('[socketAuth]', new Date(), `[Nuevo server, ${server}]`)
             next()
         }        
     } else {
