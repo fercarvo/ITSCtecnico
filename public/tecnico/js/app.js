@@ -307,8 +307,7 @@ angular.module('app', ['ui.router'])
         $scope.acciones = ["restart_idempiere", "restart_postgresql"]
 
         servidores_admin().then(data => {
-            $scope.servidores = data;
-            $scope.servidores.map(s => {
+            $scope.servidores = data.map(s => {
                 return {name: s, check: false}
             })
             $scope.$apply();
