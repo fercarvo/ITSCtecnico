@@ -21,7 +21,7 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
             comando = `sshpass -p ${pwd_ssh} ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service idempiere restart"`
         
         } else if (tipo === "restart_postgresql") {
-            comando = `sshpass -p ${pwd_ssh} ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service postgresqñ restart"`
+            comando = `sshpass -p ${pwd_ssh} ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service postgresql restart"`
         } else {
             throw new Error(`${tipo} << comando no soportado`)
         }
@@ -29,7 +29,7 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
         var resultado = await new Promise(resolve => {
             exec(comando, function (err, stdout, stderr) {
                 if (err) {
-                    console.error(err);
+                    console.log('Error ejecucion', err);
                     return resolve('Error ejecución: '+ err);
                 }
 
