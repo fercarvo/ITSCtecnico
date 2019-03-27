@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var debug = require('debug')('app:server');
 var terminal = require('./routes/terminal')
-var server_admin = require('./routes/server_admin.js')
 var port = Number(process.env.PORT || 3000)
 var server = app.listen(port)
 var os = require('os')
@@ -24,11 +23,6 @@ var io = socketio(server, {path: '/terminal-connection'});
 io.set('transports', ['websocket']);
 io.use(terminal.socketAuth)
 io.on('connection', terminal.connectionCB)
-
-
-var tech = socketio(server, {path: '/supertech'});
-tech.use(server_admin.socketAuth)
-tech.on('connection', server_admin.connectionCB)
 
 
 server.on('error', onError);
@@ -61,7 +55,7 @@ app.use((req, res, next) => {
 app.use('/', require('./routes/index'));
 app.use('/', require('./routes/login').router);
 app.use('/', terminal.router);
-app.use('/', server_admin.router);
+app.use('/', require('./routes/server_admin'));
 app.use('/', require('./routes/packin'));
 app.use('/', require('./routes/plugin'));
 //app.use('/', require('./routes/impresion'));

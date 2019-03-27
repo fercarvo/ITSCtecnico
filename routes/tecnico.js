@@ -22,19 +22,41 @@ async function getAllServers () {
 }
 
 /**
+ * Funcion que retorna el nombre, id de todos los servidores disponibles con ssh
+ * 
+ * @returns {Promise<Array<{id:number, name:string, url:string}>>} Info basica de los servidores
+ */
+async function getAllServersSSH () {
+    var query = `
+        select
+            tb_servidoresidempiere_id as id,
+            name as name
+        from tb_servidoresidempiere
+        where isactive = 'Y' and hasSSH = 'Y'`;
+
+    var { rows } = await pool.query(query);
+    return rows;
+}
+
+/**
  * Funcion que recibe una lista de IDs de servidores y retorna una lista con su data
  * 
  * @param {Array<number>} servers_arr id de los servidores
- * @returns {Promise<Array<{id:number, username:string, password:string, name:string, url:string}>>} Arreglo de info de servidores
+ * @returns {Promise<Array<{id:number, username:string, password:string, name:string, url:string, port:number, dir_ssh:string, pwd_ssh:string}>>} Arreglo de info de servidores
  */
 async function getServerData (servers_arr) { 
+    servers_arr = servers_arr.map(sv => Number(sv));
+
     var query = `
         select
             TB_ServidoresIdempiere_ID as id,
             username, 
             password,
             name, 
-            url 
+            url,
+            Port::integer as port,
+            UserSSH as dir_ssh,
+            PasswordSSH as pwd_ssh 
         from tb_servidoresidempiere
         where 
             isactive = 'Y' and
@@ -217,6 +239,7 @@ async function rename (oldpath, newpath) {
 
 module.exports = {
     getAllServers,
+    getAllServersSSH,
     getServerData,
     sendPackage,
     rename,

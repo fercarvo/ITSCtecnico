@@ -307,9 +307,8 @@ angular.module('app', ['ui.router'])
         $scope.acciones = ["restart_idempiere", "restart_postgresql"]
 
         servidores_admin().then(data => {
-            $scope.servidores = data.map(s => {
-                return {name: s, check: false}
-            })
+            $scope.servidores = data;
+            $scope.servidores.forEach(s => s.check = false)
             $scope.$apply();
         })
 
@@ -319,9 +318,8 @@ angular.module('app', ['ui.router'])
             if ($scope.servidores.filter(s => s.check === true).length !== 1)
                 return alert('Debe haber solo 1 servidor seleccionado');
 
-            try {
-        
-                var server = $scope.servidores.filter(s => s.check === true).map(s => s.name);
+            try {        
+                var server = $scope.servidores.filter(s => s.check === true).map(s => s.id);
                 server = server[0];
 
                 waitingDialog.show(`Ejecutando acción`);
@@ -430,11 +428,11 @@ async function servidores() {
 
 /**
  * Funcion que retorna una lista de servidores disponibles para administrar
- * @returns {Promise<Array<{string}>>} Nombre servidores admin
+ * @returns {Promise<Array<{id:number, name:string}>>} servidores iDempiere
  */
 async function servidores_admin () {
     try {
-        var data = await fetch('/server_admin/listar', {credentials: "same-origin"})
+        var data = await fetch('/servidor?tipo=SSH', {credentials: "same-origin"})
         var text = await data.text()
 
         if (data.ok) {

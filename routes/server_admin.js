@@ -1,21 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var login = require('./login').router
+var { exec } = require('child_process');
+var { getServerData } = require('./tecnico.js')
 
-const { tecnico_tech_secret } = require('../util/DB.js')
-
-var conectados = new Map(); //Clientes/servidores conectados
-
-router.get('/server_admin/listar', login.validarSesion, async function(req, res, next) {
-    try {
-        var clientes = [...conectados.keys()]
-        res.json(clientes)
-        
-    } catch (e) {
-        console.error(e)
-        next(e) 
-    }   
-})
 
 /**
  * @param cliente nombre del cliente escuchando para imprimir
@@ -23,20 +11,38 @@ router.get('/server_admin/listar', login.validarSesion, async function(req, res,
 router.post('/server_admin/:cliente', login.validarSesion, async function(req, res, next) {
     try {
         var tipo = req.body.tipo
+        var data = await getServerData([Number(req.params.cliente)])
+        const {name, port, dir_ssh, pwd_ssh} = data[0];
+        var comando = undefined;
 
         console.log('tipo ', tipo)
 
-        //Se obtiene el cliente websocket conectado
-        var cliente = conectados.get(req.params.cliente)
-
-        if (cliente === undefined) 
-            return res.send(`No se encuentra conectado el cliente con nombre ${req.params.cliente}`);
-
-        var respuesta = await new Promise(resolve => {
-            cliente.emit('pavimento', { tipo }, socket_res => resolve(socket_res))
-        })
+        if (tipo === "restart_idempiere") {
+            comando = `sshpass -p ${pwd_ssh} ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service idempiere restart"`
         
-        return res.send(respuesta)
+        } else if (tipo === "restart_postgresql") {
+            comando = `sshpass -p ${pwd_ssh} ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service postgresqñ restart"`
+        } else {
+            throw new Error(`${tipo} << comando no soportado`)
+        }
+
+        var resultado = await new Promise(resolve => {
+            exec(comando, function (err, stdout, stderr) {
+                if (err) {
+                    console.error(err);
+                    return resolve('Error ejecución: '+ err);
+                }
+
+                console.log(`${name} stdout: ${stdout}`);
+                console.log(`${name} stderr: ${stderr}`);
+                
+                return resolve(`${name} stdout: ${stdout}
+                
+                ${name} stderr: ${stderr}`)    
+            })
+        })        
+        
+        return res.send(resultado)
 
     } catch (e) {
         console.error(e)
@@ -45,51 +51,5 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
 })
 
 
-/**
- * 
- * @param {Object} socket websocket conectandose
- * @param {function} next Funcion que al ejecutarse deja pasar o rechaza la conexion
- */
-function socketAuth(socket, next) {
-    var server = socket.handshake.query.server;
-    var secret = socket.handshake.query.secret;
-
-    if (server && server.length > 1 && secret === tecnico_tech_secret) {
-        if (conectados.has(server)) {
-            console.error('[socketAuth]', new Date(), `[ya existe un cliente con nombre ${server}]`)
-            next(new Error(`Cliente: ${server} DUPLICADO`))
-        } else {
-            console.log('[socketAuth]', new Date(), `[Nuevo server, ${server}]`)
-            next()
-        }        
-    } else {
-        next(new Error("401 Unauthorized"))
-    }
-}
-
-/**
- * 
- * @param {Object} socket websocket conectado y escuchando
- */
-function connectionCB (socket) {
-
-    var server = socket.handshake.query.server;
-
-    if (conectados.has(server)) {
-        console.error('[connectionCB] ya existe', server)
-        socket.disconnect(true)
-    } else {
-        conectados.set(server, socket)
-    }
-
-    socket.on('disconnect', function() {
-        conectados.delete(server)
-    })
-}
-
-
-module.exports = {
-    router,
-    socketAuth,
-    connectionCB
-}
+module.exports = router;
+    
