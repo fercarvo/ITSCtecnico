@@ -11,6 +11,11 @@ var { getServerData } = require('./tecnico.js')
 router.post('/server_admin/:cliente', login.validarSesion, async function(req, res, next) {
     try {
         var tipo = req.body.tipo
+
+        if (isNaN(req.params.cliente)) {
+            throw new Error('ID del servidor no es numerico');
+        }
+
         var data = await getServerData([Number(req.params.cliente)])
         const {name, port, dir_ssh, pwd_ssh} = data[0];
         var comando = undefined;
@@ -47,7 +52,7 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
 
     } catch (e) {
         console.error(e)
-        next(e) 
+        res.send(`${e}`)
     }   
 })
 
