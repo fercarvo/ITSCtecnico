@@ -45,7 +45,7 @@ router.post('/login', function (req, res, next) {
                 puesto: 'Tecnico',
                 iat: new Date()
             })
-            res.cookie('session_itsc', token,  { maxAge: 1000*60*60*12, httpOnly: true})
+            res.cookie('session_itsc', token,  { maxAge: 1000*60*60*24*7, httpOnly: true})
             res.redirect('/')  
         } else {
             res.redirect(`/login/?msg=${encodeURIComponent("Usuario/Clave Incorrectas")}`)
