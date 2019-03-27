@@ -15,7 +15,7 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
         const {name, port, dir_ssh, pwd_ssh} = data[0];
         var comando = undefined;
 
-        console.log('tipo ', tipo)
+        console.log(name, tipo)
 
         if (tipo === "restart_idempiere") {
             comando = `sshpass -p ${pwd_ssh} ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service idempiere restart"`
@@ -35,10 +35,11 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
 
                 console.log(`${name} stdout: ${stdout}`);
                 console.log(`${name} stderr: ${stderr}`);
+
+                return resolve(`Ejecucion finalizada. 
+                stdout: ${stdout}
                 
-                return resolve(`${name} stdout: ${stdout}
-                
-                ${name} stderr: ${stderr}`)    
+                stderr: ${stderr}`)    
             })
         })        
         
