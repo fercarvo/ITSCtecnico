@@ -6,7 +6,7 @@ var { getServerData } = require('./tecnico.js')
 
 
 /**
- * @param cliente nombre del cliente escuchando para imprimir
+ * @param cliente id del servidor
  */
 router.post('/server_admin/:cliente', login.validarSesion, async function(req, res, next) {
     try {
@@ -41,10 +41,7 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
                 console.log(`${name} stdout: ${stdout}`);
                 console.log(`${name} stderr: ${stderr}`);
 
-                return resolve(`Ejecucion finalizada. 
-                stdout: ${stdout}
-                
-                stderr: ${stderr}`)    
+                return resolve(`Ejecucion finalizada, stdout: [${stdout}] stderr: [${stderr}]`)    
             })
         })        
         
