@@ -4,12 +4,14 @@ var app = express();
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var debug = require('debug')('app:server');
-var terminal = require('./routes/terminal')
+var terminal = undefined //require('./routes/terminal')
 var port = Number(process.env.PORT || 3000)
 var server = app.listen(port)
 var os = require('os')
 var fs = require('fs')
+
 var socketio = require('socket.io')
+var io = undefined
 
 try {
     if (!fs.existsSync(`${os.tmpdir()}/tecnico`)){
@@ -19,10 +21,7 @@ try {
     console.error('no se pudo crear /tmp/tecnico', e)
 }
 
-var io = socketio(server, {path: '/terminal-connection'});
-io.set('transports', ['websocket']);
-io.use(terminal.socketAuth)
-io.on('connection', terminal.connectionCB)
+
 
 
 server.on('error', onError);
@@ -54,12 +53,25 @@ app.use((req, res, next) => {
 
 app.use('/', require('./routes/index'));
 app.use('/', require('./routes/login').router);
-app.use('/', terminal.router);
 app.use('/', require('./routes/server_admin'));
 app.use('/', require('./routes/packin'));
 app.use('/', require('./routes/plugin'));
 //app.use('/', require('./routes/impresion'));
 //app.use('/', require('./routes/induvis'));
+
+if (process.env.NODE_ENV === 'production') {
+    console.log('PRODUCCIÓN')
+    terminal = require('./routes/terminal')
+
+    app.use('/', terminal.router);
+
+    io = socketio(server, {path: '/terminal-connection'});
+    io.set('transports', ['websocket']);
+    io.use(terminal.socketAuth)
+    io.on('connection', terminal.connectionCB)
+} else {
+    console.log('DESARROLLO')
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

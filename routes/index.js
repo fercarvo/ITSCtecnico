@@ -19,6 +19,7 @@ router.get('/servidor', login.validarSesion, async function (req, res, next) {
 
 /* GET home page. */
 router.get('/', login.validarSesion, function(req, res, next) {
+    res.setHeader("Content-Security-Policy", "connect-src 'self'");
     res.render('index');
 })
 
