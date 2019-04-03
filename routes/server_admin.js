@@ -23,10 +23,11 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
         console.log(name, tipo)
 
         if (tipo === "restart_idempiere") {
-            comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service idempiere restart"`
-        
+            comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service idempiere restart"` 
         } else if (tipo === "restart_postgresql") {
             comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service postgresql restart"`
+        } else if (tipo === "espacio_disco") {
+            comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "df -h -x tmpfs"`
         } else {
             throw new Error(`${tipo} << comando no soportado`)
         }
