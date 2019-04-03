@@ -45,7 +45,7 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
                 console.log(`${name} stdout: ${stdout}`);
                 console.log(`${name} stderr: ${stderr}`);
 
-                return resolve({ stdout, stderr })    
+                return resolve({ stdout: `${stdout}`, stderr: `${stderr}` })    
             })
         })        
         
