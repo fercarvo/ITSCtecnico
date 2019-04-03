@@ -26,7 +26,7 @@ angular.module('app', ['ui.router'])
                 controller: 'impresion_itsc'
             })   
             .state('server_admin', {
-                templateUrl: '/tecnico/views/server_admin.html', //impresion_itsc server_admin
+                templateUrl: '/tecnico/views/server_admin2.html', //impresion_itsc server_admin
                 controller: 'server_admin'
             })            
     }])
@@ -344,7 +344,7 @@ angular.module('app', ['ui.router'])
 
                 var resultado = await result.text()
 
-                $scope.resultado = resultado                  
+                $scope.resultado = JSON.parse( resultado )                 
                 
             } catch (e) {
                 console.error(e)
@@ -353,7 +353,7 @@ angular.module('app', ['ui.router'])
                 setTimeout(function(){
                     waitingDialog.hide();
                     $scope.$apply()
-                    $('#resultados_modal').modal('show')
+                    $('#resultados_admin_modal').modal('show')
                 }, 500)
             }
         }

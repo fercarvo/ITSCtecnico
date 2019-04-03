@@ -36,13 +36,16 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
             exec(comando, function (err, stdout, stderr) {
                 if (err) {
                     console.log('Error ejecucion', err);
-                    return resolve('Error ejecución: '+ err);
+                    return resolve({
+                        stdout: null,
+                        stderr: `${err}`
+                    })
                 }
 
                 console.log(`${name} stdout: ${stdout}`);
                 console.log(`${name} stderr: ${stderr}`);
 
-                return resolve(`Ejecucion finalizada, stdout: [${stdout}] stderr: [${stderr}]`)    
+                return resolve({ stdout, stderr })    
             })
         })        
         
