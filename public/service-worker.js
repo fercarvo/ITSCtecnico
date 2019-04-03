@@ -7,9 +7,12 @@
  * Este SW servira para incrementar el performance y reducir el trafico de los aplicativos usados en ITSC
  */
 
-const CACHE_NAME = 'Static-ITSCwebapps-v2.4'
+const CACHE_NAME = 'Static-ITSCwebapps-v3.0'
 
 self.addEventListener('install', function (event) {
+
+    self.skipWaiting();
+
     event.waitUntil(async function() {
         const cache = await caches.open(CACHE_NAME);
         await cache.addAll(['/tecnico/js/app.js'])
@@ -48,13 +51,13 @@ self.addEventListener('fetch', function(event) {
 
     const destination = event.request.destination;
 
-    switch (destination) {
-        case 'style':
-        case 'script':
+    switch (destination) {        
         case 'document': {
             event.respondWith( cacheThenNetworkUpdate(event) )  
             return;
         }
+        case 'script':
+        case 'style':
         case 'image':
         case 'font': {
             event.respondWith( alwaysCache(event) )

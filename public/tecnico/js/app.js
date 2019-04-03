@@ -26,7 +26,7 @@ angular.module('app', ['ui.router'])
                 controller: 'impresion_itsc'
             })   
             .state('server_admin', {
-                templateUrl: '/tecnico/views/server_admin2.html', //impresion_itsc server_admin
+                templateUrl: '/tecnico/views/server_admin.html', //impresion_itsc server_admin
                 controller: 'server_admin'
             })            
     }])
@@ -304,7 +304,7 @@ angular.module('app', ['ui.router'])
     .controller("server_admin" ,["$state", "$scope", function($state, $scope){
 
         $scope.servidores = []
-        $scope.acciones = ["restart_idempiere", "restart_postgresql", "espacio_disco"]
+        $scope.acciones = ["restart_idempiere", "restart_postgresql", "espacio_disco", "espacio_RAM"]
 
         servidores_admin().then(data => {
             $scope.servidores = data;
@@ -315,16 +315,19 @@ angular.module('app', ['ui.router'])
         $scope.procesar = async function (accion) {
             console.log(accion)
 
+            $scope.resultado = null;
+            $scope.resultado = {}
+
             if ($scope.servidores.filter(s => s.check === true).length !== 1)
                 return alert('Debe haber solo 1 servidor seleccionado');
 
             try {        
-                var server = $scope.servidores.filter(s => s.check === true).map(s => s.id);
+                var server = $scope.servidores.filter(s => s.check === true);
                 server = server[0];
 
-                waitingDialog.show(`Ejecutando acción`);
+                waitingDialog.show(`Ejecutando acción: ${accion} en ${server.name}`);
                 
-                var url = new URL(`${document.URL}server_admin/${server}`)
+                var url = new URL(`${document.URL}server_admin/${server.id}`)
                 var data = {tipo: accion}
 
                 var result = await fetch(url, {
@@ -416,11 +419,12 @@ async function servidores() {
         } else if (data.status === 401){
             return location.replace('/logout/')
         } else {
-            throw new Error(`Status: ${data.status}, ${data.statusText}`);
+            alert(`Error server Status: ${data.status}, ${data.statusText}`)
+            return []
         }    
 
     } catch (e) {
-        alert("error carga: " + e.message)
+        alert("Error de conexión: " + e.message)
         console.error(e)
         return []
     }    
@@ -440,11 +444,12 @@ async function servidores_admin () {
         } else if (data.status === 401){
             return location.replace('/logout/')
         } else {
-            throw new Error(`Status: ${data.status}, ${data.statusText}`);
+            alert(`Error server Status: ${data.status}, ${data.statusText}`)
+            return []
         }    
 
     } catch (e) {
-        alert("error carga: " + e.message)
+        alert("Error de conexión: " + e.message)
         console.error(e)
         return []
     }    

@@ -28,6 +28,8 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
             comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service postgresql restart"`
         } else if (tipo === "espacio_disco") {
             comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "df -h -x tmpfs"`
+        } else if (tipo === "espacio_RAM") {
+            comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "free -h"`
         } else {
             throw new Error(`${tipo} << comando no soportado`)
         }
