@@ -13,6 +13,8 @@ router.get('/login', function(req, res, next) {
 })
 
 router.validarSesion = function (req, res, next) {    
+    res.setHeader("Content-Security-Policy", "connect-src 'self'");
+
     try {
         if (!req.cookies || !req.cookies.session_itsc)
             throw new Error('No existe cookie de sesion');
