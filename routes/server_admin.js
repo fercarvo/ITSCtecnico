@@ -4,6 +4,19 @@ var login = require('./login').router
 var { exec } = require('child_process');
 var { getServerData } = require('./tecnico.js')
 
+const STATS = `echo ------------------------------------------------------------ && ` +
+`echo DISCO DURO && ` +
+`echo ------------------------------------------------------------ && ` +
+`df -h -x tmpfs && ` +
+`echo -e '\n------------------------------------------------------------' && `+
+`echo RAM && ` +
+`echo ------------------------------------------------------------ && ` +
+`free -h && ` +
+`echo -e '\n------------------------------------------------------------' && `+
+`echo CPU && ` +
+`echo ------------------------------------------------------------ && ` +
+`mpstat -P ALL 1 2 | grep '^Average'`; 
+
 
 /**
  * @param cliente id del servidor
@@ -26,10 +39,8 @@ router.post('/server_admin/:cliente', login.validarSesion, async function(req, r
             comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service idempiere restart"` 
         } else if (tipo === "restart_postgresql") {
             comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "service postgresql restart"`
-        } else if (tipo === "espacio_disco") {
-            comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "df -h -x tmpfs"`
-        } else if (tipo === "espacio_RAM") {
-            comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "free -h"`
+        } else if (tipo === "STATS") {
+            comando = `sshpass -p "${pwd_ssh}" ssh -o "StrictHostKeyChecking no" -o ConnectTimeout=60 -p ${Number(port)} ${dir_ssh} "${STATS}"`
         } else {
             throw new Error(`${tipo} << comando no soportado`)
         }

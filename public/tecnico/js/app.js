@@ -304,7 +304,7 @@ angular.module('app', ['ui.router'])
     .controller("server_admin" ,["$state", "$scope", function($state, $scope){
 
         $scope.servidores = []
-        $scope.acciones = ["restart_idempiere", "restart_postgresql", "espacio_disco", "espacio_RAM"]
+        $scope.acciones = ["restart_idempiere", "restart_postgresql", "STATS"]
 
         servidores_admin().then(data => {
             $scope.servidores = data;
