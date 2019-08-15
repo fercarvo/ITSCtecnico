@@ -22,7 +22,8 @@ const STATS = `echo ------------------------------------------------------------
 `echo -e '\n------------------------------------------------------------' && `+
 `echo RESPALDOS && ` +
 `echo ------------------------------------------------------------ && ` +
-'find /opt/idempiere-server/data/ -maxdepth 1 -type f  -printf "%TY-%Tm-%Td %TH:%TM  %6k KiB %p\n" | sort -r | cut -f 2-'
+`find /opt/idempiere-server/data/ -maxdepth 1 -type f  -printf '%TY-%Tm-%Td %TH:%TM  %6k KiB %p\n' | sort -r | cut -f 2-`
+
 
 /**
  * @param cliente id del servidor
